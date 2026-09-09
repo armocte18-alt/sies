@@ -42,6 +42,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'metas.ver',
         'metas.gestionar',
         'kardex.gestionar',
+        'catalogos-rh.gestionar',
         'accesos.gestionar',
     ];
 
@@ -62,7 +63,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ],
         'tecnica' => ['sucursales.ver', 'sucursales.editar.equipamiento', 'mantenimientos.ver'],
         'finanzas' => ['sucursales.ver', 'sucursales.editar.finanzas', 'tarjetas.ver', 'tarjetas.gestionar'],
-        'rrhh' => ['empleados.ver', 'empleados.gestionar', 'kardex.gestionar', 'directorios.ver', 'directorios.gestionar'],
+        'rrhh' => ['empleados.ver', 'empleados.gestionar', 'kardex.gestionar', 'catalogos-rh.gestionar', 'directorios.ver', 'directorios.gestionar'],
         'juridico' => ['sucursales.ver', 'circulares.ver', 'circulares.gestionar', 'minutarios.ver', 'minutarios.gestionar'],
         'creditos' => ['sucursales.ver', 'metas.ver'],
         'comercial' => ['sucursales.ver', 'metas.ver', 'metas.gestionar'],

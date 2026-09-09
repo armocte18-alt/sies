@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PlaceholderController;
 use App\Http\Controllers\ProfileController;
@@ -30,6 +31,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/{sucursal}/inmueble', [InmuebleController::class, 'update'])->name('inmueble.update');
         Route::patch('/{sucursal}/equipamiento', [EquipamientoController::class, 'update'])->name('equipamiento.update');
         Route::patch('/{sucursal}/finanzas', [FinanzasController::class, 'update'])->name('finanzas.update');
+    });
+
+    Route::prefix('rh/catalogos')->name('rh.catalogos.')->middleware('can:catalogos-rh.gestionar')->group(function () {
+        Route::get('/', [CatalogosRhController::class, 'index'])->name('index');
+
+        Route::post('/niveles-salariales', [CatalogosRhController::class, 'storeNivelSalarial'])->name('niveles-salariales.store');
+        Route::put('/niveles-salariales/{nivelSalarial}', [CatalogosRhController::class, 'updateNivelSalarial'])->name('niveles-salariales.update');
+        Route::delete('/niveles-salariales/{nivelSalarial}', [CatalogosRhController::class, 'destroyNivelSalarial'])->name('niveles-salariales.destroy');
+
+        Route::post('/{catalogo}', [CatalogosRhController::class, 'storeItem'])
+            ->name('items.store')
+            ->where('catalogo', \App\Support\CatalogoRhRegistro::patronRuta());
+        Route::put('/{catalogo}/{id}', [CatalogosRhController::class, 'updateItem'])
+            ->name('items.update')
+            ->where('catalogo', \App\Support\CatalogoRhRegistro::patronRuta());
+        Route::delete('/{catalogo}/{id}', [CatalogosRhController::class, 'destroyItem'])
+            ->name('items.destroy')
+            ->where('catalogo', \App\Support\CatalogoRhRegistro::patronRuta());
     });
 
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida

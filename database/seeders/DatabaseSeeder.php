@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CoordinacionSeeder::class,
             AlcaldiaSeeder::class,
             RolesAndPermissionsSeeder::class,
+            CatalogosRhSeeder::class,
             AdminUserSeeder::class,
         ]);
 

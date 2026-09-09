@@ -33,6 +33,7 @@ return [
         [
             'title' => 'Ajustes RR.HH.',
             'items' => [
+                ['label' => 'Catálogos RR.HH.', 'route' => 'rh.catalogos.index', 'icon' => 'clipboard', 'permission' => 'catalogos-rh.gestionar'],
                 ['label' => 'Ajustes Kárdex', 'route' => 'kardex.index', 'icon' => 'clipboard', 'permission' => 'kardex.gestionar'],
             ],
         ],
