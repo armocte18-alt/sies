@@ -6,6 +6,7 @@ use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\CircularController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\MetasAnalisisController;
+use App\Http\Controllers\MinutarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
@@ -100,6 +101,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/metas', [MetasAnalisisController::class, 'index'])->name('metas.index')->middleware('can:metas.ver');
 
+    Route::prefix('minutarios')->name('minutarios.')->middleware('can:minutarios.ver')->group(function () {
+        Route::get('/', [MinutarioController::class, 'index'])->name('index');
+
+        Route::middleware('can:minutarios.gestionar')->group(function () {
+            Route::post('/boletines', [MinutarioController::class, 'storeBoletin'])->name('boletines.store');
+            Route::put('/boletines/{boletin}', [MinutarioController::class, 'updateBoletin'])->name('boletines.update');
+
+            Route::post('/oficios', [MinutarioController::class, 'storeOficio'])->name('oficios.store');
+            Route::put('/oficios/{oficio}', [MinutarioController::class, 'updateOficio'])->name('oficios.update');
+            Route::patch('/oficios/{oficio}/cancelar', [MinutarioController::class, 'cancelOficio'])->name('oficios.cancelar');
+            Route::patch('/oficios/{oficio}/escaneo', [MinutarioController::class, 'toggleEscaneoOficio'])->name('oficios.escaneo');
+        });
+    });
+
     Route::prefix('empleados')->name('empleados.')->middleware('can:empleados.ver')->group(function () {
         Route::get('/', [EmpleadoController::class, 'index'])->name('index');
 
@@ -139,7 +154,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
-        ['uri' => 'minutarios', 'name' => 'minutarios.index', 'permission' => 'minutarios.ver', 'titulo' => 'Minutarios'],
         ['uri' => 'tarjetas', 'name' => 'tarjetas.index', 'permission' => 'tarjetas.ver', 'titulo' => 'Control de Tarjetas'],
         ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
