@@ -82,6 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
         droppable: puedeGestionar,
         events: rutaEventos,
 
+        // "block" en vez del "list-item" por defecto: cada evento se pinta
+        // como una píldora de color completa (igual que los eventos rápidos)
+        // que puede crecer a varias líneas en vez de cortarse en una sola.
+        eventDisplay: 'block',
+
+        // Por defecto FullCalendar omite los minutos en punto ("10" en vez
+        // de "10:00"), lo que se confunde fácilmente con un título cortado.
+        eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+
+        eventDidMount(info) {
+            // Refuerza con el título completo en el atributo nativo "title"
+            // por si el texto todavía no cupiera del todo en la celda.
+            const hora = info.timeText ? `${info.timeText} — ` : '';
+            info.el.title = `${hora}${info.event.title}`;
+        },
+
         dateClick(info) {
             if (puedeGestionar) {
                 abrirModalNuevo(info.dateStr);

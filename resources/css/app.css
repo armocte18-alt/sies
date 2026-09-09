@@ -126,3 +126,102 @@
 .dark textarea::placeholder {
     color: #64748b;
 }
+
+/*
+ * Calendario de Eventos.
+ *
+ * FullCalendar aporta su propio CSS mínimo; sin retoques, los eventos del
+ * mes se ven como una sola línea de texto que se corta ("list-item" con
+ * punto + hora + título en un renglón), y los "eventos rápidos" son <div>
+ * planos sin ninguna clase de Tailwind (de ahí que se vean "cuadrados").
+ */
+.evento-rapido-chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 2.25rem 0.6rem 0.9rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+    cursor: grab;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.evento-rapido-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgb(0 0 0 / 0.2);
+}
+
+.evento-rapido-chip:active {
+    cursor: grabbing;
+}
+
+.evento-rapido-chip .truncate {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.evento-rapido-chip .btn-editar-rapido {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    color: rgb(255 255 255 / 0.85);
+    background: rgb(255 255 255 / 0.15);
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.evento-rapido-chip .btn-editar-rapido:hover {
+    background: rgb(255 255 255 / 0.32);
+    color: #fff;
+}
+
+/* Píldoras de eventos dentro de la cuadrícula del mes/semana: se permite
+   que el título use dos líneas en vez de cortarse a media palabra. */
+#calendario .fc-daygrid-event {
+    white-space: normal;
+    align-items: flex-start;
+    border-radius: 0.375rem;
+    padding: 0.2rem 0.4rem;
+    line-height: 1.2;
+}
+
+#calendario .fc-daygrid-event .fc-event-time {
+    font-weight: 700;
+}
+
+#calendario .fc-daygrid-event .fc-event-title {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+#calendario .fc-daygrid-day-events {
+    margin-bottom: 0.25rem;
+}
+
+#calendario .fc-daygrid-event-harness + .fc-daygrid-event-harness {
+    margin-top: 0.2rem;
+}
+
+#calendario .fc-h-event,
+#calendario .fc-v-event {
+    border-radius: 0.375rem;
+}
+
+#calendario .fc-list-event-time,
+#calendario .fc-list-event-title {
+    white-space: normal;
+}
