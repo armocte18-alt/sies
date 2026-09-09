@@ -20,6 +20,53 @@ Alpine.data('autoHide', () => ({
     },
 }));
 
+/**
+ * Búsqueda en vivo: re-consulta el listado conforme se escribe (con un
+ * pequeño debounce) en lugar de esperar a que se envíe el formulario, y
+ * reemplaza solo el contenedor de resultados sin recargar la página.
+ */
+Alpine.data('busquedaEnVivo', () => ({
+    valor: '',
+    timer: null,
+    form: null,
+
+    init() {
+        // $el resolves to whichever element's directive is currently being
+        // evaluated (the <input>, once buscar() runs from x-on:input), not
+        // the x-data root — so the form itself is captured once, here.
+        this.form = this.$el;
+        this.valor = this.form.dataset.valorInicial || '';
+    },
+
+    buscar() {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => this.ejecutar(), 350);
+    },
+
+    async ejecutar() {
+        const target = document.getElementById(this.form.dataset.resultados);
+
+        if (!target) {
+            return;
+        }
+
+        const url = new URL(this.form.action);
+        if (this.valor) {
+            url.searchParams.set('buscar', this.valor);
+        } else {
+            url.searchParams.delete('buscar');
+        }
+        url.searchParams.delete('page');
+
+        const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+
+        if (response.ok) {
+            target.innerHTML = await response.text();
+            window.history.replaceState({}, '', url);
+        }
+    },
+}));
+
 let toastSequence = 0;
 
 Alpine.store('toasts', {

@@ -10,11 +10,14 @@
         @endcan
     </div>
 
-    <form method="GET" action="{{ route('sucursales.index') }}" class="mt-4" role="search">
+    <form method="GET" action="{{ route('sucursales.index') }}" class="mt-4" role="search" x-data="busquedaEnVivo"
+        data-resultados="resultados-sucursales" data-valor-inicial="{{ request('buscar') }}">
         <label for="buscar" class="sr-only">Buscar sucursal por nombre o clave financiera</label>
         <div class="flex max-w-md gap-2">
-            <input type="search" id="buscar" name="buscar" value="{{ request('buscar') }}"
+            <input type="search" id="buscar" name="buscar" x-model="valor"
                 placeholder="Buscar por nombre o clave financiera..."
+                x-on:input="buscar()"
+                autocomplete="off"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
             <button type="submit"
                 class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
@@ -23,48 +26,7 @@
         </div>
     </form>
 
-    <div class="mt-4 overflow-x-auto rounded-lg bg-white shadow-sm">
-        <table class="min-w-full divide-y divide-gray-200 text-sm">
-            <caption class="sr-only">Listado de sucursales registradas</caption>
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-600">Nombre oficial</th>
-                    <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-600">Clave</th>
-                    <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-600">Alcaldía</th>
-                    <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-600">Titular</th>
-                    <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-600">Estatus</th>
-                    <th scope="col" class="px-4 py-3"><span class="sr-only">Acciones</span></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-                @forelse ($sucursales as $sucursal)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 font-medium text-gray-900">{{ $sucursal->nombre_oficial }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $sucursal->clave_financiera }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $sucursal->ubicacion?->alcaldia?->nombre ?? '—' }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $sucursal->titular?->nombre_completo ?? '—' }}</td>
-                        <td class="px-4 py-3">
-                            <x-sucursales.estatus-badge :estatus="$sucursal->estatus_operativo" />
-                        </td>
-                        <td class="px-4 py-3 text-right">
-                            <a href="{{ route('sucursales.show', $sucursal) }}"
-                                class="font-semibold text-brand-green hover:underline focus:outline-none focus:ring-2 focus:ring-brand-green rounded">
-                                Ver detalle
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-4 py-8 text-center text-gray-500">
-                            No se encontraron sucursales.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-4">
-        {{ $sucursales->links() }}
+    <div id="resultados-sucursales" class="mt-4">
+        @include('sucursales.partials.tabla')
     </div>
 </x-sies-layout>

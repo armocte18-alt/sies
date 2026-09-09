@@ -5,27 +5,45 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Sucursales\StoreSucursalRequest;
 use App\Http\Requests\Sucursales\UpdateIdentificacionRequest;
 use App\Models\Sucursal;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class SucursalController extends Controller
 {
-    public function index(): View
+    private const COLUMNAS_ORDENABLES = [
+        'nombre' => 'sucursales.nombre_oficial',
+        'clave' => 'sucursales.clave_financiera',
+        'alcaldia' => 'alcaldias.nombre',
+        'estatus' => 'sucursales.estatus_operativo',
+    ];
+
+    public function index(Request $request): View
     {
         $this->authorize('viewAny', Sucursal::class);
 
+        $columna = self::COLUMNAS_ORDENABLES[$request->query('sort')] ?? 'sucursales.clave_financiera';
+        $direccion = $request->query('direction') === 'desc' ? 'desc' : 'asc';
+
         $sucursales = Sucursal::query()
+            ->select('sucursales.*')
+            ->leftJoin('sucursal_ubicaciones', 'sucursal_ubicaciones.sucursal_id', '=', 'sucursales.id')
+            ->leftJoin('alcaldias', 'alcaldias.id', '=', 'sucursal_ubicaciones.alcaldia_id')
             ->with(['ubicacion.alcaldia', 'finanzas', 'titular'])
-            ->orderBy('clave_financiera')
-            ->when(request('buscar'), function ($query, $buscar) {
+            ->when($request->query('buscar'), function ($query, $buscar) {
                 $query->where(function ($q) use ($buscar) {
-                    $q->where('nombre_oficial', 'like', "%{$buscar}%")
-                        ->orWhere('clave_financiera', 'like', "%{$buscar}%");
+                    $q->where('sucursales.nombre_oficial', 'like', "%{$buscar}%")
+                        ->orWhere('sucursales.clave_financiera', 'like', "%{$buscar}%");
                 });
             })
+            ->orderBy($columna, $direccion)
             ->paginate(15)
             ->withQueryString();
+
+        if ($request->ajax()) {
+            return view('sucursales.partials.tabla', compact('sucursales'));
+        }
 
         return view('sucursales.index', compact('sucursales'));
     }
