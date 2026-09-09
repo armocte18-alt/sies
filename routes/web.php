@@ -7,6 +7,7 @@ use App\Http\Controllers\CircularController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\MetasAnalisisController;
 use App\Http\Controllers\MinutarioController;
+use App\Http\Controllers\TarjetaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
@@ -142,6 +143,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::prefix('tarjetas')->name('tarjetas.')->middleware('can:tarjetas.ver')->group(function () {
+        Route::get('/', [TarjetaController::class, 'index'])->name('index');
+        Route::get('/historial', [TarjetaController::class, 'historial'])->name('historial');
+
+        Route::middleware('can:tarjetas.gestionar')->group(function () {
+            Route::post('/productos', [TarjetaController::class, 'storeProducto'])->name('productos.store');
+            Route::post('/', [TarjetaController::class, 'storeTarjeta'])->name('store');
+            Route::post('/asignar', [TarjetaController::class, 'asignar'])->name('asignar');
+            Route::patch('/{tarjeta}/retirar', [TarjetaController::class, 'retirar'])->name('retirar');
+            Route::post('/retirar-por-sucursal', [TarjetaController::class, 'retirarPorSucursal'])->name('retirar-por-sucursal');
+            Route::patch('/{tarjeta}/renominar', [TarjetaController::class, 'renominar'])->name('renominar');
+            Route::patch('/{tarjeta}/corregir-renominacion', [TarjetaController::class, 'corregirRenominacion'])->name('corregir-renominacion');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -154,7 +170,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
-        ['uri' => 'tarjetas', 'name' => 'tarjetas.index', 'permission' => 'tarjetas.ver', 'titulo' => 'Control de Tarjetas'],
         ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
         ['uri' => 'kardex', 'name' => 'kardex.index', 'permission' => 'kardex.gestionar', 'titulo' => 'Ajustes Kárdex'],
