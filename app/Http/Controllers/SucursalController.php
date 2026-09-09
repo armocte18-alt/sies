@@ -17,7 +17,7 @@ class SucursalController extends Controller
 
         $sucursales = Sucursal::query()
             ->with(['ubicacion.alcaldia', 'finanzas', 'titular'])
-            ->orderBy('nombre_oficial')
+            ->orderBy('clave_financiera')
             ->when(request('buscar'), function ($query, $buscar) {
                 $query->where(function ($q) use ($buscar) {
                     $q->where('nombre_oficial', 'like', "%{$buscar}%")

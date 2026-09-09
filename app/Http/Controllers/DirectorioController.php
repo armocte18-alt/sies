@@ -21,7 +21,7 @@ class DirectorioController extends Controller
     public function index(): View
     {
         return view('directorios.index', [
-            'sucursales' => Sucursal::with(['ubicacion.alcaldia', 'operacion'])->orderBy('nombre_oficial')->get(),
+            'sucursales' => Sucursal::with(['ubicacion.alcaldia', 'operacion'])->orderBy('clave_financiera')->get(),
             'gerencias' => Gerencia::with('creador')->orderBy('nombre')->get(),
             'areas' => AreaCentral::with('gerencia')->orderBy('nombre')->get(),
             'externos' => PersonalExterno::orderBy('nombre')->get(),

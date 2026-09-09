@@ -157,7 +157,9 @@
                                             onsubmit="return confirm('¿Eliminar este activo del inventario?');" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Eliminar</button>
+                                            <button type="submit" class="rounded p-1.5 text-red-600 hover:bg-red-50">
+                                                <x-action-icon icon="trash" label="Eliminar" />
+                                            </button>
                                         </form>
                                     @endcan
                                 </td>

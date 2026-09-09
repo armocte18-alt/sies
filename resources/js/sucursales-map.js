@@ -52,7 +52,19 @@ function initSucursalesMap(elementId, markers) {
         });
 
         group.addTo(map);
-        map.fitBounds(group.getBounds().pad(0.2));
+
+        const fit = () => map.invalidateSize().fitBounds(group.getBounds().pad(0.2));
+
+        // El contenedor puede no tener su tamaño final (fuentes, layout en
+        // grid) en el momento en que Leaflet mide el mapa; sin esto, el
+        // encuadre inicial sale descentrado o recortado.
+        fit();
+        requestAnimationFrame(fit);
+        setTimeout(fit, 300);
+
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(() => map.invalidateSize()).observe(el);
+        }
     }
 }
 

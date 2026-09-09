@@ -21,7 +21,7 @@ class DashboardController extends Controller
 
         $sucursalesPorAlcaldia = Alcaldia::query()
             ->withCount(['ubicaciones as sucursales_count'])
-            ->orderByDesc('sucursales_count')
+            ->orderBy('nombre')
             ->get()
             ->filter(fn (Alcaldia $alcaldia) => $alcaldia->sucursales_count > 0)
             ->values();

@@ -91,8 +91,13 @@
                                         onsubmit="return confirm('¿{{ $usuario->activo ? 'Desactivar' : 'Reactivar' }} la cuenta de {{ $usuario->name }}?');">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="font-semibold {{ $usuario->activo ? 'text-red-600' : 'text-emerald-600' }} hover:underline">
-                                            {{ $usuario->activo ? 'Desactivar' : 'Reactivar' }}
+                                        <button type="submit" @class([
+                                            'rounded p-1.5 hover:bg-red-50' => $usuario->activo,
+                                            'rounded p-1.5 hover:bg-emerald-50' => !$usuario->activo,
+                                            'text-red-600' => $usuario->activo,
+                                            'text-emerald-600' => !$usuario->activo,
+                                        ])>
+                                            <x-action-icon :icon="$usuario->activo ? 'ban' : 'check-circle'" :label="$usuario->activo ? 'Desactivar' : 'Reactivar'" />
                                         </button>
                                     </form>
                                 @endif

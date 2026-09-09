@@ -37,22 +37,24 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <div class="flex justify-end gap-3">
+                            <div class="flex justify-end gap-1">
                                 <button type="button" x-show="editandoId !== {{ $item->id }}"
                                     x-on:click="editandoId = {{ $item->id }}"
-                                    class="text-xs font-semibold text-brand-green hover:underline">
-                                    Editar
+                                    class="rounded p-1.5 text-brand-green hover:bg-brand-green-50">
+                                    <x-action-icon icon="pencil" label="Editar" />
                                 </button>
                                 <button type="button" x-show="editandoId === {{ $item->id }}" x-cloak
                                     x-on:click="editandoId = null"
-                                    class="text-xs text-gray-500 hover:underline">
-                                    Cancelar
+                                    class="rounded p-1.5 text-gray-500 hover:bg-gray-100">
+                                    <x-action-icon icon="x-mark" label="Cancelar" />
                                 </button>
                                 <form method="POST" action="{{ route('rh.catalogos.items.destroy', [$catalogo, $item->id]) }}"
                                     onsubmit="return confirm('¿Eliminar este elemento del catálogo?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Eliminar</button>
+                                    <button type="submit" class="rounded p-1.5 text-red-600 hover:bg-red-50">
+                                        <x-action-icon icon="trash" label="Eliminar" />
+                                    </button>
                                 </form>
                             </div>
                         </td>

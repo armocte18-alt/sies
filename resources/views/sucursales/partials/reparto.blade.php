@@ -52,7 +52,9 @@
                                         onsubmit="return confirm('¿Eliminar esta motocicleta?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="font-semibold text-red-600 hover:underline">Eliminar</button>
+                                        <button type="submit" class="rounded p-1.5 text-red-600 hover:bg-red-50">
+                                            <x-action-icon icon="trash" label="Eliminar" />
+                                        </button>
                                     </form>
                                 </div>
                             @endif
@@ -164,7 +166,9 @@
                                             onsubmit="return confirm('¿Eliminar este registro de equipamiento?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Eliminar</button>
+                                            <button type="submit" class="rounded p-1.5 text-red-600 hover:bg-red-50">
+                                                <x-action-icon icon="trash" label="Eliminar" />
+                                            </button>
                                         </form>
                                     @endif
                                 </td>

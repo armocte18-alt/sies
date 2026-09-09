@@ -56,19 +56,28 @@
                         </td>
                         <td class="px-4 py-3 text-right">
                             @can('directorios.gestionar')
-                                <div class="flex justify-end gap-3">
+                                <div class="flex justify-end gap-1">
                                     <button type="button" x-show="editandoId !== {{ $externo->id }}"
                                         x-on:click="editandoId = {{ $externo->id }}"
-                                        class="text-xs font-semibold text-brand-green hover:underline">Editar</button>
+                                        class="rounded p-1.5 text-brand-green hover:bg-brand-green-50">
+                                        <x-action-icon icon="pencil" label="Editar" />
+                                    </button>
                                     <button type="button" x-show="editandoId === {{ $externo->id }}" x-cloak
                                         x-on:click="editandoId = null"
-                                        class="text-xs text-gray-500 hover:underline">Cancelar</button>
+                                        class="rounded p-1.5 text-gray-500 hover:bg-gray-100">
+                                        <x-action-icon icon="x-mark" label="Cancelar" />
+                                    </button>
                                     <form method="POST" action="{{ route('directorios.externos.estado', $externo) }}"
                                         onsubmit="return confirm('¿{{ $externo->activo ? 'Dar de baja' : 'Reactivar' }} este contacto del directorio?');">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="text-xs font-semibold {{ $externo->activo ? 'text-red-600' : 'text-emerald-600' }} hover:underline">
-                                            {{ $externo->activo ? 'Dar de baja' : 'Reactivar' }}
+                                        <button type="submit" @class([
+                                            'rounded p-1.5 hover:bg-red-50' => $externo->activo,
+                                            'rounded p-1.5 hover:bg-emerald-50' => !$externo->activo,
+                                            'text-red-600' => $externo->activo,
+                                            'text-emerald-600' => !$externo->activo,
+                                        ])>
+                                            <x-action-icon :icon="$externo->activo ? 'ban' : 'check-circle'" :label="$externo->activo ? 'Dar de baja' : 'Reactivar'" />
                                         </button>
                                     </form>
                                 </div>
