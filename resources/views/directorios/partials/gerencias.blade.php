@@ -1,7 +1,17 @@
 @php /** @var \Illuminate\Support\Collection $gerencias */ @endphp
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2 overflow-x-auto rounded-lg bg-white shadow-sm">
+<div>
+    <div class="mb-3 flex items-center justify-between">
+        <h3 class="text-sm font-semibold text-gray-800">Gerencias</h3>
+        @can('directorios.gestionar')
+            <button type="button" x-on:click="$dispatch('open-modal', 'agregar-gerencia')"
+                class="text-xs font-semibold text-brand-green hover:underline">
+                + Agregar gerencia
+            </button>
+        @endcan
+    </div>
+
+    <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <caption class="sr-only">Directorio de gerencias</caption>
             <thead class="bg-gray-50">
@@ -105,47 +115,54 @@
     </div>
 
     @can('directorios.gestionar')
-        <div class="rounded-lg bg-white p-5 shadow-sm">
-            <h3 class="mb-4 text-sm font-semibold text-gray-800">Agregar gerencia</h3>
-
-            <form method="POST" action="{{ route('directorios.gerencias.store') }}" class="space-y-4">
+        <x-modal name="agregar-gerencia" focusable>
+            <form method="POST" action="{{ route('directorios.gerencias.store') }}" class="p-6 space-y-4">
                 @csrf
+                <h2 class="text-lg font-medium text-gray-900">Agregar gerencia</h2>
 
-                <div>
-                    <x-input-label for="gerencia-nombre" value="Nombre" />
-                    <x-text-input id="gerencia-nombre" name="nombre" type="text" class="mt-1 block w-full" required maxlength="150" />
-                    <x-input-error :messages="$errors->get('nombre')" class="mt-1" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-coordinacion" value="Coordinación" />
-                    <x-text-input id="gerencia-coordinacion" name="coordinacion" type="text" class="mt-1 block w-full" required maxlength="150" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-extension" value="Extensión (opcional)" />
-                    <x-text-input id="gerencia-extension" name="extension" type="text" class="mt-1 block w-full" maxlength="10" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-comite" value="Comité (opcional)" />
-                    <x-text-input id="gerencia-comite" name="comite" type="text" class="mt-1 block w-full" maxlength="150" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-correo" value="Correo institucional" />
-                    <x-text-input id="gerencia-correo" name="correo_finabien" type="email" class="mt-1 block w-full" required maxlength="255" />
-                    <x-input-error :messages="$errors->get('correo_finabien')" class="mt-1" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-sigitel" value="Correo SIGITEL (opcional)" />
-                    <x-text-input id="gerencia-sigitel" name="correo_sigitel" type="email" class="mt-1 block w-full" maxlength="255" />
-                </div>
-                <div>
-                    <x-input-label for="gerencia-obs" value="Observaciones (opcional)" />
-                    <textarea id="gerencia-obs" name="observaciones" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green"></textarea>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <x-input-label for="gerencia-nombre" value="Nombre" />
+                        <x-text-input id="gerencia-nombre" name="nombre" type="text" class="mt-1 block w-full" required maxlength="150" />
+                        <x-input-error :messages="$errors->get('nombre')" class="mt-1" />
+                    </div>
+                    <div>
+                        <x-input-label for="gerencia-coordinacion" value="Coordinación" />
+                        <x-text-input id="gerencia-coordinacion" name="coordinacion" type="text" class="mt-1 block w-full" required maxlength="150" />
+                    </div>
+                    <div>
+                        <x-input-label for="gerencia-extension" value="Extensión (opcional)" />
+                        <x-text-input id="gerencia-extension" name="extension" type="text" class="mt-1 block w-full" maxlength="10" />
+                    </div>
+                    <div>
+                        <x-input-label for="gerencia-comite" value="Comité (opcional)" />
+                        <x-text-input id="gerencia-comite" name="comite" type="text" class="mt-1 block w-full" maxlength="150" />
+                    </div>
+                    <div>
+                        <x-input-label for="gerencia-correo" value="Correo institucional" />
+                        <x-text-input id="gerencia-correo" name="correo_finabien" type="email" class="mt-1 block w-full" required maxlength="255" />
+                        <x-input-error :messages="$errors->get('correo_finabien')" class="mt-1" />
+                    </div>
+                    <div>
+                        <x-input-label for="gerencia-sigitel" value="Correo SIGITEL (opcional)" />
+                        <x-text-input id="gerencia-sigitel" name="correo_sigitel" type="email" class="mt-1 block w-full" maxlength="255" />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <x-input-label for="gerencia-obs" value="Observaciones (opcional)" />
+                        <textarea id="gerencia-obs" name="observaciones" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green"></textarea>
+                    </div>
                 </div>
 
-                <button type="submit" class="w-full rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
-                    Agregar
-                </button>
+                <div class="flex justify-end gap-3">
+                    <button type="button" x-on:click="$dispatch('close-modal', 'agregar-gerencia')" class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
+                        Agregar
+                    </button>
+                </div>
             </form>
-        </div>
+        </x-modal>
     @endcan
 </div>

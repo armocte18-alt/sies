@@ -2,8 +2,16 @@
     /** @var \Illuminate\Support\Collection $nivelesSalariales */
 @endphp
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2 overflow-x-auto rounded-lg bg-white shadow-sm">
+<div>
+    <div class="mb-3 flex items-center justify-between">
+        <h3 class="text-sm font-semibold text-gray-800">Niveles salariales</h3>
+        <button type="button" x-on:click="$dispatch('open-modal', 'agregar-nivel-salarial')"
+            class="text-xs font-semibold text-brand-green hover:underline">
+            + Agregar nivel salarial
+        </button>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <caption class="sr-only">Catálogo de niveles salariales</caption>
             <thead class="bg-gray-50">
@@ -98,40 +106,46 @@
         </table>
     </div>
 
-    <div class="rounded-lg bg-white p-5 shadow-sm">
-        <h3 class="mb-4 text-sm font-semibold text-gray-800">Agregar nivel salarial</h3>
-
-        <form method="POST" action="{{ route('rh.catalogos.niveles-salariales.store') }}" class="space-y-4">
+    <x-modal name="agregar-nivel-salarial" focusable>
+        <form method="POST" action="{{ route('rh.catalogos.niveles-salariales.store') }}" class="p-6 space-y-4">
             @csrf
+            <h2 class="text-lg font-medium text-gray-900">Agregar nivel salarial</h2>
 
-            <div>
-                <x-input-label for="consecutivo" value="Consecutivo" />
-                <x-text-input id="consecutivo" name="consecutivo" type="number" min="1" class="mt-1 block w-full" required />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                    <x-input-label for="consecutivo" value="Consecutivo" />
+                    <x-text-input id="consecutivo" name="consecutivo" type="number" min="1" class="mt-1 block w-full" required />
+                </div>
+
+                <div>
+                    <x-input-label for="nivel_salarial" value="Nivel salarial" />
+                    <x-text-input id="nivel_salarial" name="nivel_salarial" type="text" class="mt-1 block w-full" required maxlength="50" placeholder="Ej. 15 A1" />
+                </div>
+
+                <div>
+                    <x-input-label for="sueldo_base" value="Sueldo base" />
+                    <x-text-input id="sueldo_base" name="sueldo_base" type="number" step="0.01" min="0" class="mt-1 block w-full" required placeholder="10000.00" />
+                </div>
+
+                <div>
+                    <x-input-label for="compensacion_garantizada" value="Compensación garantizada" />
+                    <x-text-input id="compensacion_garantizada" name="compensacion_garantizada" type="number" step="0.01" min="0" class="mt-1 block w-full" placeholder="7500.00" />
+                </div>
+
+                <div class="sm:col-span-2">
+                    <x-input-label for="observaciones" value="Observaciones (opcional)" />
+                    <x-text-input id="observaciones" name="observaciones" type="text" class="mt-1 block w-full" maxlength="255" />
+                </div>
             </div>
 
-            <div>
-                <x-input-label for="nivel_salarial" value="Nivel salarial" />
-                <x-text-input id="nivel_salarial" name="nivel_salarial" type="text" class="mt-1 block w-full" required maxlength="50" placeholder="Ej. 15 A1" />
+            <div class="flex justify-end gap-3">
+                <button type="button" x-on:click="$dispatch('close-modal', 'agregar-nivel-salarial')" class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                    Cancelar
+                </button>
+                <button type="submit" class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
+                    Agregar
+                </button>
             </div>
-
-            <div>
-                <x-input-label for="sueldo_base" value="Sueldo base" />
-                <x-text-input id="sueldo_base" name="sueldo_base" type="number" step="0.01" min="0" class="mt-1 block w-full" required placeholder="10000.00" />
-            </div>
-
-            <div>
-                <x-input-label for="compensacion_garantizada" value="Compensación garantizada" />
-                <x-text-input id="compensacion_garantizada" name="compensacion_garantizada" type="number" step="0.01" min="0" class="mt-1 block w-full" placeholder="7500.00" />
-            </div>
-
-            <div>
-                <x-input-label for="observaciones" value="Observaciones (opcional)" />
-                <x-text-input id="observaciones" name="observaciones" type="text" class="mt-1 block w-full" maxlength="255" />
-            </div>
-
-            <button type="submit" class="w-full rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
-                Agregar
-            </button>
         </form>
-    </div>
+    </x-modal>
 </div>

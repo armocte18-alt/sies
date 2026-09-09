@@ -1,7 +1,17 @@
 @php /** @var \Illuminate\Support\Collection $externos */ @endphp
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2 overflow-x-auto rounded-lg bg-white shadow-sm">
+<div>
+    <div class="mb-3 flex items-center justify-between">
+        <h3 class="text-sm font-semibold text-gray-800">Personal externo</h3>
+        @can('directorios.gestionar')
+            <button type="button" x-on:click="$dispatch('open-modal', 'agregar-externo')"
+                class="text-xs font-semibold text-brand-green hover:underline">
+                + Agregar contacto externo
+            </button>
+        @endcan
+    </div>
+
+    <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <caption class="sr-only">Directorio de personal externo</caption>
             <thead class="bg-gray-50">
@@ -85,15 +95,14 @@
     </div>
 
     @can('directorios.gestionar')
-        <div class="rounded-lg bg-white p-5 shadow-sm">
-            <h3 class="mb-4 text-sm font-semibold text-gray-800">Agregar contacto externo</h3>
-
+        <x-modal name="agregar-externo" focusable>
             @include('directorios.partials.externo-form', [
                 'accion' => route('directorios.externos.store'),
                 'metodo' => null,
                 'externo' => null,
                 'boton' => 'Agregar',
+                'modalName' => 'agregar-externo',
             ])
-        </div>
+        </x-modal>
     @endcan
 </div>

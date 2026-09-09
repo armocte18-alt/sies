@@ -1,11 +1,16 @@
 @php
     $idPrefix = $externo?->id ?? 'nuevo';
+    $modalName = $modalName ?? null;
 @endphp
 
-<form method="POST" action="{{ $accion }}" class="space-y-4">
+<form method="POST" action="{{ $accion }}" @class(['space-y-4', 'p-6' => $modalName])>
     @csrf
     @if ($metodo)
         @method($metodo)
+    @endif
+
+    @if ($modalName)
+        <h2 class="text-lg font-medium text-gray-900">{{ $boton === 'Agregar' ? 'Agregar contacto externo' : $boton }}</h2>
     @endif
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -70,7 +75,14 @@
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">{{ $externo?->observaciones }}</textarea>
     </div>
 
-    <button type="submit" class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
-        {{ $boton }}
-    </button>
+    <div @class(['flex justify-end gap-3' => $modalName])>
+        @if ($modalName)
+            <button type="button" x-on:click="$dispatch('close-modal', '{{ $modalName }}')" class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                Cancelar
+            </button>
+        @endif
+        <button type="submit" class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
+            {{ $boton }}
+        </button>
+    </div>
 </form>

@@ -6,8 +6,16 @@
      */
 @endphp
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2 overflow-x-auto rounded-lg bg-white shadow-sm">
+<div>
+    <div class="mb-3 flex items-center justify-between">
+        <h3 class="text-sm font-semibold capitalize text-gray-800">{{ $titulo }}</h3>
+        <button type="button" x-on:click="$dispatch('open-modal', 'agregar-{{ $catalogo }}')"
+            class="text-xs font-semibold text-brand-green hover:underline">
+            + Agregar a {{ $titulo }}
+        </button>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <caption class="sr-only">Catálogo de {{ $titulo }}</caption>
             <thead class="bg-gray-50">
@@ -92,11 +100,10 @@
         </table>
     </div>
 
-    <div class="rounded-lg bg-white p-5 shadow-sm">
-        <h3 class="mb-4 text-sm font-semibold text-gray-800">Agregar a {{ $titulo }}</h3>
-
-        <form method="POST" action="{{ route('rh.catalogos.items.store', $catalogo) }}" class="space-y-4">
+    <x-modal name="agregar-{{ $catalogo }}" focusable>
+        <form method="POST" action="{{ route('rh.catalogos.items.store', $catalogo) }}" class="p-6 space-y-4">
             @csrf
+            <h2 class="text-lg font-medium capitalize text-gray-900">Agregar a {{ $titulo }}</h2>
 
             <div>
                 <x-input-label for="nombre-{{ $catalogo }}" value="Nombre" />
@@ -113,9 +120,14 @@
                 <x-text-input id="orden-{{ $catalogo }}" name="orden" type="number" min="0" class="mt-1 block w-full" />
             </div>
 
-            <button type="submit" class="w-full rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
-                Agregar
-            </button>
+            <div class="flex justify-end gap-3">
+                <button type="button" x-on:click="$dispatch('close-modal', 'agregar-{{ $catalogo }}')" class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                    Cancelar
+                </button>
+                <button type="submit" class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
+                    Agregar
+                </button>
+            </div>
         </form>
-    </div>
+    </x-modal>
 </div>
