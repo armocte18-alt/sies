@@ -201,6 +201,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
+        Route::post('/roles', [AccesosController::class, 'storeRole'])->name('roles.store');
+        Route::delete('/roles/{role}', [AccesosController::class, 'destroyRole'])->name('roles.destroy');
+        Route::put('/roles/{role}/permisos', [AccesosController::class, 'updateRolePermissions'])->name('roles.permisos.update');
+        Route::post('/permisos', [AccesosController::class, 'storePermission'])->name('permisos.store');
         Route::get('/{user}', [AccesosController::class, 'edit'])->name('edit');
         Route::put('/{user}/roles', [AccesosController::class, 'updateRoles'])->name('roles.update');
         Route::put('/{user}/permisos', [AccesosController::class, 'updatePermissions'])->name('permisos.update');

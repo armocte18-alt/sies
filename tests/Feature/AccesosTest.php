@@ -160,6 +160,118 @@ class AccesosTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
+    public function test_admin_can_create_a_role(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->post(route('accesos.roles.store'), ['name' => 'logistica'])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('roles', ['name' => 'logistica']);
+    }
+
+    public function test_role_name_must_be_lowercase_slug_and_unique(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->from(route('accesos.roles'))
+            ->post(route('accesos.roles.store'), ['name' => 'Con Espacios'])
+            ->assertSessionHasErrors('name');
+
+        $this->actingAs($admin)
+            ->from(route('accesos.roles'))
+            ->post(route('accesos.roles.store'), ['name' => 'finanzas'])
+            ->assertSessionHasErrors('name');
+    }
+
+    public function test_admin_can_create_a_permission_and_it_is_granted_to_administrador(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->post(route('accesos.permisos.store'), ['name' => 'logistica.ver'])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('permissions', ['name' => 'logistica.ver']);
+        $this->assertTrue($admin->fresh()->can('logistica.ver'));
+    }
+
+    public function test_permission_name_must_follow_module_dot_action_format(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->from(route('accesos.roles'))
+            ->post(route('accesos.permisos.store'), ['name' => 'sinformato'])
+            ->assertSessionHasErrors('name');
+    }
+
+    public function test_admin_can_sync_a_roles_permissions(): void
+    {
+        $admin = $this->admin();
+        $rol = \Spatie\Permission\Models\Role::create(['name' => 'logistica', 'guard_name' => 'web']);
+        $usuario = User::factory()->create();
+        $usuario->assignRole('logistica');
+
+        $this->actingAs($admin)
+            ->put(route('accesos.roles.permisos.update', $rol), ['permisos' => ['sucursales.ver', 'calendario.ver']])
+            ->assertRedirect();
+
+        $this->assertTrue($usuario->fresh()->can('sucursales.ver'));
+        $this->assertTrue($usuario->fresh()->can('calendario.ver'));
+        $this->assertFalse($usuario->fresh()->can('sucursales.crear'));
+    }
+
+    public function test_administrador_role_permissions_cannot_be_edited(): void
+    {
+        $admin = $this->admin();
+        $rolAdministrador = \Spatie\Permission\Models\Role::where('name', 'administrador')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->put(route('accesos.roles.permisos.update', $rolAdministrador), ['permisos' => []])
+            ->assertForbidden();
+    }
+
+    public function test_role_cannot_be_deleted_while_it_has_users(): void
+    {
+        $admin = $this->admin();
+        $usuario = User::factory()->create();
+        $usuario->assignRole('finanzas');
+        $rolFinanzas = \Spatie\Permission\Models\Role::where('name', 'finanzas')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->delete(route('accesos.roles.destroy', $rolFinanzas))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('roles', ['name' => 'finanzas']);
+    }
+
+    public function test_role_can_be_deleted_once_it_has_no_users(): void
+    {
+        $admin = $this->admin();
+        $rol = \Spatie\Permission\Models\Role::create(['name' => 'logistica', 'guard_name' => 'web']);
+
+        $this->actingAs($admin)
+            ->delete(route('accesos.roles.destroy', $rol))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('roles', ['name' => 'logistica']);
+    }
+
+    public function test_administrador_role_cannot_be_deleted(): void
+    {
+        $admin = $this->admin();
+        $rolAdministrador = \Spatie\Permission\Models\Role::where('name', 'administrador')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->delete(route('accesos.roles.destroy', $rolAdministrador))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('roles', ['name' => 'administrador']);
+    }
+
     public function test_deactivating_a_logged_in_user_ends_their_session_on_next_request(): void
     {
         $user = User::factory()->create();
