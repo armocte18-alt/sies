@@ -5,6 +5,7 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\CircularController;
 use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\MetasAnalisisController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
@@ -97,6 +98,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::get('/metas', [MetasAnalisisController::class, 'index'])->name('metas.index')->middleware('can:metas.ver');
+
     Route::prefix('empleados')->name('empleados.')->middleware('can:empleados.ver')->group(function () {
         Route::get('/', [EmpleadoController::class, 'index'])->name('index');
 
@@ -140,7 +143,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ['uri' => 'tarjetas', 'name' => 'tarjetas.index', 'permission' => 'tarjetas.ver', 'titulo' => 'Control de Tarjetas'],
         ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
-        ['uri' => 'metas', 'name' => 'metas.index', 'permission' => 'metas.ver', 'titulo' => 'Metas y Análisis'],
         ['uri' => 'kardex', 'name' => 'kardex.index', 'permission' => 'kardex.gestionar', 'titulo' => 'Ajustes Kárdex'],
     ];
 
