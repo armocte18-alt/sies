@@ -8,6 +8,10 @@
 
     <title>{{ $title ? $title.' · SIES' : 'SIES | GECDMX' }}</title>
 
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
@@ -33,8 +37,8 @@
             class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full transform flex-col overflow-y-auto bg-brand-green text-white transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:flex lg:translate-x-0"
             aria-label="Barra lateral"
         >
-            <div class="flex items-center gap-2 px-5 py-5 text-lg font-bold">
-                <x-nav-icon name="grid" class="h-6 w-6 text-brand-gold" />
+            <div class="flex items-center gap-3 px-5 py-4 text-lg font-bold">
+                <img src="{{ asset('images/favicon-48.png') }}" alt="" class="h-10 w-10 shrink-0" aria-hidden="true">
                 <span>SIES | GECDMX</span>
             </div>
 

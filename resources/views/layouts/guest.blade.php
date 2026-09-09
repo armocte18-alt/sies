@@ -7,6 +7,10 @@
 
         <title>{{ config('app.name', 'SIES') }}</title>
 
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
@@ -14,11 +18,11 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col items-center justify-center gap-8 bg-gray-50 px-4 py-10">
-            <div class="flex flex-col items-center gap-1 text-center">
-                {{-- Sustituir por el logo oficial en public/images/logo-finabien.png --}}
-                <span class="text-2xl font-bold text-brand-green">Financiera <span class="text-brand-gold">para el</span></span>
-                <span class="font-serif text-3xl italic text-brand-green">Bienestar</span>
-            </div>
+            <img
+                src="{{ asset('images/FinabienLogo.png') }}"
+                alt="Financiera para el Bienestar"
+                class="h-28 w-auto sm:h-32"
+            >
 
             <div class="w-full max-w-md overflow-hidden rounded-xl bg-brand-green shadow-xl">
                 {{ $slot }}
