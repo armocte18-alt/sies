@@ -11,6 +11,7 @@ use App\Http\Controllers\Sucursales\EquipamientoController;
 use App\Http\Controllers\Sucursales\FinanzasController;
 use App\Http\Controllers\Sucursales\HorariosController;
 use App\Http\Controllers\Sucursales\InmuebleController;
+use App\Http\Controllers\Sucursales\RepartoController;
 use App\Http\Controllers\Sucursales\UbicacionController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/{sucursal}/horarios', [HorariosController::class, 'update'])->name('horarios.update');
         Route::patch('/{sucursal}/inmueble', [InmuebleController::class, 'update'])->name('inmueble.update');
         Route::patch('/{sucursal}/equipamiento', [EquipamientoController::class, 'update'])->name('equipamiento.update');
+        Route::post('/{sucursal}/activos-ti', [EquipamientoController::class, 'storeActivo'])->name('activos-ti.store');
+        Route::put('/{sucursal}/activos-ti/{activo}', [EquipamientoController::class, 'updateActivo'])->name('activos-ti.update');
+        Route::delete('/{sucursal}/activos-ti/{activo}', [EquipamientoController::class, 'destroyActivo'])->name('activos-ti.destroy');
         Route::patch('/{sucursal}/finanzas', [FinanzasController::class, 'update'])->name('finanzas.update');
+
+        Route::post('/{sucursal}/motocicletas', [RepartoController::class, 'storeMotocicleta'])->name('motocicletas.store');
+        Route::put('/{sucursal}/motocicletas/{motocicleta}', [RepartoController::class, 'updateMotocicleta'])->name('motocicletas.update');
+        Route::delete('/{sucursal}/motocicletas/{motocicleta}', [RepartoController::class, 'destroyMotocicleta'])->name('motocicletas.destroy');
+        Route::post('/{sucursal}/motocicletas/{motocicleta}/combustible', [RepartoController::class, 'storeCombustible'])->name('motocicletas.combustible.store');
+
+        Route::post('/{sucursal}/equipamiento-reparto', [RepartoController::class, 'storeEquipamiento'])->name('equipamiento-reparto.store');
+        Route::put('/{sucursal}/equipamiento-reparto/{equipamientoReparto}', [RepartoController::class, 'updateEquipamiento'])->name('equipamiento-reparto.update');
+        Route::delete('/{sucursal}/equipamiento-reparto/{equipamientoReparto}', [RepartoController::class, 'destroyEquipamiento'])->name('equipamiento-reparto.destroy');
     });
 
     Route::prefix('rh/catalogos')->name('rh.catalogos.')->middleware('can:catalogos-rh.gestionar')->group(function () {

@@ -69,6 +69,30 @@
                 </div>
             </div>
 
+            <fieldset class="rounded-md border border-gray-200 p-4">
+                <legend class="px-1 text-sm font-semibold text-gray-700">Protección civil</legend>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div class="flex items-center gap-2 sm:pt-6">
+                        <input type="hidden" name="cuenta_proteccion_civil" value="0">
+                        <input type="checkbox" id="cuenta_proteccion_civil" name="cuenta_proteccion_civil" value="1"
+                            @checked(old('cuenta_proteccion_civil', $inmueble?->cuenta_proteccion_civil))
+                            class="rounded border-gray-300 text-brand-green focus:ring-brand-green">
+                        <label for="cuenta_proteccion_civil" class="text-sm text-gray-700">Cuenta con dictamen vigente</label>
+                    </div>
+                    <div>
+                        <x-input-label for="numero_dictamen_proteccion_civil" value="Número de dictamen" />
+                        <x-text-input id="numero_dictamen_proteccion_civil" name="numero_dictamen_proteccion_civil" type="text" class="mt-1 block w-full"
+                            :value="old('numero_dictamen_proteccion_civil', $inmueble?->numero_dictamen_proteccion_civil)" />
+                    </div>
+                    <div>
+                        <x-input-label for="vigencia_proteccion_civil" value="Vigencia del dictamen" />
+                        <input type="date" id="vigencia_proteccion_civil" name="vigencia_proteccion_civil"
+                            value="{{ old('vigencia_proteccion_civil', $inmueble?->vigencia_proteccion_civil?->format('Y-m-d')) }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
+                    </div>
+                </div>
+            </fieldset>
+
             <div>
                 <x-input-label for="observaciones" value="Observaciones" />
                 <textarea id="observaciones" name="observaciones" rows="3"
@@ -86,6 +110,7 @@
                 <div><dt class="text-gray-500">Tipo de contrato</dt><dd class="font-medium text-gray-900">{{ $inmueble->tipo_contrato_posesion ?? '—' }}</dd></div>
                 <div><dt class="text-gray-500">Superficie</dt><dd class="font-medium text-gray-900">{{ $inmueble->superficie_m2 ?? '—' }} m²</dd></div>
                 <div><dt class="text-gray-500">Renta mensual</dt><dd class="font-medium text-gray-900">${{ number_format($inmueble->monto_renta_mensual ?? 0, 2) }}</dd></div>
+                <div><dt class="text-gray-500">Protección civil</dt><dd class="font-medium text-gray-900">{{ $inmueble->cuenta_proteccion_civil ? 'Vigente' : 'Sin dictamen' }}</dd></div>
             </dl>
         @else
             <p class="text-sm text-gray-500">Aún no se ha capturado la información del inmueble.</p>

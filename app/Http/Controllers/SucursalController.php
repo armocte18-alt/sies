@@ -59,9 +59,13 @@ class SucursalController extends Controller
             'operacion',
             'inmueble',
             'equipamiento',
+            'activosTi' => fn ($q) => $q->orderBy('tipo'),
             'finanzas',
             'empleados' => fn ($q) => $q->orderBy('funcion_laboral'),
             'titular',
+            'motocicletas' => fn ($q) => $q->orderBy('placa'),
+            'motocicletas.cargasCombustible',
+            'equipamientoReparto' => fn ($q) => $q->orderBy('tipo'),
         ]);
 
         return view('sucursales.show', compact('sucursal'));

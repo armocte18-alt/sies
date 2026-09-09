@@ -23,6 +23,9 @@ class UpdateInmuebleRequest extends FormRequest
             'monto_renta_mensual' => ['nullable', 'numeric', 'min:0', 'max:999999999999'],
             'propietario_arrendador' => ['nullable', 'string', 'max:150'],
             'numero_escritura_contrato' => ['nullable', 'string', 'max:60'],
+            'cuenta_proteccion_civil' => ['sometimes', 'boolean'],
+            'numero_dictamen_proteccion_civil' => ['nullable', 'string', 'max:60'],
+            'vigencia_proteccion_civil' => ['nullable', 'date'],
             'observaciones' => ['nullable', 'string', 'max:2000'],
         ];
     }
@@ -37,6 +40,8 @@ class UpdateInmuebleRequest extends FormRequest
             'monto_renta_mensual' => 'monto de renta mensual',
             'propietario_arrendador' => 'propietario / arrendador',
             'numero_escritura_contrato' => 'número de escritura o contrato',
+            'numero_dictamen_proteccion_civil' => 'número de dictamen de protección civil',
+            'vigencia_proteccion_civil' => 'vigencia de protección civil',
         ];
     }
 }

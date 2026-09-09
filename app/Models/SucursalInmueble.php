@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'sucursal_id', 'tipo_contrato_posesion', 'superficie_m2', 'medidas',
     'fecha_inicio_contrato', 'fecha_fin_contrato', 'monto_renta_mensual',
-    'propietario_arrendador', 'numero_escritura_contrato', 'observaciones',
+    'propietario_arrendador', 'numero_escritura_contrato',
+    'cuenta_proteccion_civil', 'numero_dictamen_proteccion_civil', 'vigencia_proteccion_civil',
+    'observaciones',
 ])]
 class SucursalInmueble extends Model
 {
@@ -25,6 +27,8 @@ class SucursalInmueble extends Model
             'fecha_fin_contrato' => 'date',
             'superficie_m2' => 'decimal:2',
             'monto_renta_mensual' => 'decimal:2',
+            'cuenta_proteccion_civil' => 'boolean',
+            'vigencia_proteccion_civil' => 'date',
         ];
     }
 

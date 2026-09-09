@@ -56,4 +56,9 @@ class SucursalPolicy
     {
         return $user->can('sucursales.editar.finanzas');
     }
+
+    public function updateReparto(User $user, Sucursal $sucursal): bool
+    {
+        return $user->can('sucursales.editar.reparto');
+    }
 }

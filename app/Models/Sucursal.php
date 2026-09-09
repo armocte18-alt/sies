@@ -73,4 +73,16 @@ class Sucursal extends Model
     {
         return $this->hasMany(ActivoTi::class);
     }
+
+    // --- Reparto (mensajería) ---
+
+    public function motocicletas(): HasMany
+    {
+        return $this->hasMany(SucursalMotocicleta::class);
+    }
+
+    public function equipamientoReparto(): HasMany
+    {
+        return $this->hasMany(SucursalEquipamientoReparto::class);
+    }
 }

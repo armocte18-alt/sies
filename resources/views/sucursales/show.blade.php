@@ -77,6 +77,7 @@
                 'inmueble' => 'Inmueble',
                 'equipamiento' => 'Equipamiento técnico',
                 'finanzas' => 'Finanzas',
+                ...($sucursal->operacion?->reparto_activo ? ['reparto' => 'Reparto'] : []),
             ] as $key => $label)
                 <button type="button" role="tab" id="tab-{{ $key }}" aria-controls="panel-{{ $key }}"
                     x-on:click="tab = '{{ $key }}'" :aria-selected="(tab === '{{ $key }}').toString()"
@@ -103,5 +104,10 @@
         <div role="tabpanel" id="panel-finanzas" aria-labelledby="tab-finanzas" x-show="tab === 'finanzas'" x-cloak class="pt-4">
             @include('sucursales.partials.finanzas')
         </div>
+        @if ($sucursal->operacion?->reparto_activo)
+            <div role="tabpanel" id="panel-reparto" aria-labelledby="tab-reparto" x-show="tab === 'reparto'" x-cloak class="pt-4">
+                @include('sucursales.partials.reparto')
+            </div>
+        @endif
     </div>
 </x-sies-layout>

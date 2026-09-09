@@ -23,6 +23,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'sucursales.editar.inmueble',        // Administración
         'sucursales.editar.equipamiento',    // Técnica
         'sucursales.editar.finanzas',        // Finanzas
+        'sucursales.editar.reparto',         // Operación: motocicletas y EPP de mensajería
         'empleados.ver',
         'empleados.gestionar',
         'directorios.ver',
@@ -55,6 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'operacion' => [
             'sucursales.ver', 'sucursales.crear',
             'sucursales.editar.identificacion', 'sucursales.editar.ubicacion', 'sucursales.editar.horarios',
+            'sucursales.editar.reparto',
             'empleados.ver', 'calendario.ver', 'calendario.gestionar',
         ],
         'administracion' => [
