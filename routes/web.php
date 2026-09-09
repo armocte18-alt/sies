@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccesosController;
 use App\Http\Controllers\CatalogosRhController;
+use App\Http\Controllers\CircularController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
@@ -84,6 +85,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::prefix('circulares')->name('circulares.')->middleware('can:circulares.ver')->group(function () {
+        Route::get('/', [CircularController::class, 'index'])->name('index');
+
+        Route::middleware('can:circulares.gestionar')->group(function () {
+            Route::post('/', [CircularController::class, 'store'])->name('store');
+            Route::put('/{circular}', [CircularController::class, 'update'])->name('update');
+            Route::patch('/{circular}/estado', [CircularController::class, 'toggleActive'])->name('estado');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -98,7 +109,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     $modulosPendientes = [
         ['uri' => 'minutarios', 'name' => 'minutarios.index', 'permission' => 'minutarios.ver', 'titulo' => 'Minutarios'],
         ['uri' => 'empleados', 'name' => 'empleados.index', 'permission' => 'empleados.ver', 'titulo' => 'Empleados'],
-        ['uri' => 'circulares', 'name' => 'circulares.index', 'permission' => 'circulares.ver', 'titulo' => 'Circulares'],
         ['uri' => 'calendario', 'name' => 'calendario.index', 'permission' => 'calendario.ver', 'titulo' => 'Calendario de Eventos'],
         ['uri' => 'tarjetas', 'name' => 'tarjetas.index', 'permission' => 'tarjetas.ver', 'titulo' => 'Control de Tarjetas'],
         ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
