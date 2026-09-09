@@ -1,4 +1,4 @@
-<x-sios-layout :title="'Sucursales'">
+<x-sies-layout :title="'Sucursales'">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 class="text-2xl font-bold text-gray-900">Sucursales</h1>
 
@@ -67,4 +67,4 @@
     <div class="mt-4">
         {{ $sucursales->links() }}
     </div>
-</x-sios-layout>
+</x-sies-layout>

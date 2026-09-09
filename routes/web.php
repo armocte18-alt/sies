@@ -53,7 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name($modulo['name'])
             ->middleware("can:{$modulo['permission']}")
             ->defaults('titulo', $modulo['titulo'])
-            ->defaults('descripcion', 'Este módulo está planificado para una siguiente fase de desarrollo del sistema SIOS.');
+            ->defaults('descripcion', 'Este módulo está planificado para una siguiente fase de desarrollo del sistema SIES.');
     }
 });
 

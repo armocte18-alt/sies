@@ -1,4 +1,6 @@
-# Arquitectura técnica — SIOS (Sistema Integral de Operación y Servicios)
+# Arquitectura técnica — SIES (Sistema de Información, Estadística y Servicios)
+
+Desarrollado por la Coordinación de Operación GECDMX · V.1.0.0
 
 Plataforma institucional para la Gerencia Estatal FINABIEN Ciudad de México y sus
 coordinaciones (Supervisión, Operación, Créditos, Jurídico, Finanzas,
@@ -67,7 +69,7 @@ sies/
 │   │   └── Middleware/SecurityHeaders.php
 │   ├── Models/                               # Sucursal + 5 modelos "sección" + catálogos
 │   └── Policies/SucursalPolicy.php
-├── config/sios.php                           # navegación del sidebar y permisos asociados
+├── config/sies.php                           # navegación del sidebar y permisos asociados
 ├── database/
 │   ├── migrations/                           # una tabla por sección de sucursal
 │   ├── seeders/                              # coordinaciones, alcaldías, roles/permisos, admin

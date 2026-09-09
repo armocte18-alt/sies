@@ -1,4 +1,6 @@
-# SIOS · Sistema Integral de Operación y Servicios
+# SIES · Sistema de Información, Estadística y Servicios
+
+Desarrollado por la Coordinación de Operación GECDMX · V.1.0.0
 
 Plataforma de gestión para la Gerencia Estatal FINABIEN Ciudad de México y sus
 coordinaciones (Supervisión, Operación, Créditos, Jurídico, Finanzas,
@@ -44,15 +46,15 @@ Editar `.env` con los datos reales de MySQL y del primer administrador:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=sios
-DB_USERNAME=sios_app
+DB_DATABASE=sies
+DB_USERNAME=sies_app
 DB_PASSWORD=una-contraseña-fuerte
 
-SIOS_ADMIN_EMAIL=admin@finabien.cdmx.gob.mx
-SIOS_ADMIN_PASSWORD=defínela-aquí-antes-de-sembrar
+SIES_ADMIN_EMAIL=admin@finabien.cdmx.gob.mx
+SIES_ADMIN_PASSWORD=defínela-aquí-antes-de-sembrar
 ```
 
-Crear la base de datos vacía en MySQL (`CREATE DATABASE sios CHARACTER SET
+Crear la base de datos vacía en MySQL (`CREATE DATABASE sies CHARACTER SET
 utf8mb4;`) y luego:
 
 ```powershell
@@ -71,22 +73,25 @@ a la raíz del proyecto:
 
 ```apacheconf
 <VirtualHost *:80>
-    ServerName sios.finabien.local
+    ServerName sies-gecdmx.com
+    ServerAlias www.sies-gecdmx.com sies-gecdmx.com.<IP-DEL-SERVIDOR>.nip.io
     DocumentRoot "D:/Servidor/www/sies/public"
 
     <Directory "D:/Servidor/www/sies/public">
+        Options FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
 
-    ErrorLog "logs/sios-error.log"
-    CustomLog "logs/sios-access.log" combined
+    ErrorLog "logs/sies-gecdmx-error.log"
+    CustomLog "logs/sies-gecdmx-access.log" combined
 </VirtualHost>
 ```
 
-Para que las demás computadoras de la intranet resuelvan `sios.finabien.local`,
+Para que las demás computadoras de la intranet resuelvan `sies-gecdmx.com`,
 agrega una entrada en el DNS interno o en el archivo `hosts` de cada equipo
-apuntando a la IP del servidor. Con `AllowOverride All`, Laravel usa el
+apuntando a la IP del servidor (o usa el alias `nip.io` de arriba, que no
+requiere tocar el `hosts` de cada máquina). Con `AllowOverride All`, Laravel usa el
 `.htaccess` que ya viene en `public/` para las URLs amigables — confirma que
 `mod_rewrite` esté cargado.
 

@@ -1,4 +1,4 @@
-<x-sios-layout :title="'Nueva sucursal'">
+<x-sies-layout :title="'Nueva sucursal'">
     <h1 class="text-2xl font-bold text-gray-900">Nueva sucursal</h1>
     <p class="mt-1 text-sm text-gray-500">
         Registra los datos generales. El resto de la información (ubicación, horarios, inmueble, equipamiento y
@@ -52,4 +52,4 @@
             </a>
         </div>
     </form>
-</x-sios-layout>
+</x-sies-layout>

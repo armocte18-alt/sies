@@ -1,4 +1,4 @@
-<x-sios-layout :title="'Mi perfil'">
+<x-sies-layout :title="'Mi perfil'">
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             Mi perfil
@@ -24,4 +24,4 @@
             </div>
         </div>
     </div>
-</x-sios-layout>
+</x-sies-layout>

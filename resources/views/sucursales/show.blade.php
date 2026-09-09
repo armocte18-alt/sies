@@ -2,7 +2,7 @@
     $finanzas = $sucursal->finanzas;
 @endphp
 
-<x-sios-layout :title="$sucursal->nombre_oficial">
+<x-sies-layout :title="$sucursal->nombre_oficial">
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <a href="{{ route('sucursales.index') }}" class="text-sm text-brand-green hover:underline">&larr; Sucursales</a>
@@ -104,4 +104,4 @@
             @include('sucursales.partials.finanzas')
         </div>
     </div>
-</x-sios-layout>
+</x-sies-layout>

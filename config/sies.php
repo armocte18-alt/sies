@@ -3,7 +3,7 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Navegación principal SIOS
+    | Navegación principal SIES
     |--------------------------------------------------------------------------
     | Cada entrada controla su visibilidad mediante un permiso de
     | spatie/laravel-permission. Los módulos aún no implementados se sirven

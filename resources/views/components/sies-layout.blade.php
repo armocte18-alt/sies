@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ? $title.' · SIOS' : 'SIOS | GECDMX' }}</title>
+    <title>{{ $title ? $title.' · SIES' : 'SIES | GECDMX' }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
@@ -35,12 +35,12 @@
         >
             <div class="flex items-center gap-2 px-5 py-5 text-lg font-bold">
                 <x-nav-icon name="grid" class="h-6 w-6 text-brand-gold" />
-                <span>SIOS | GECDMX</span>
+                <span>SIES | GECDMX</span>
             </div>
 
             <nav aria-label="Navegación principal" class="flex-1 space-y-6 px-3 pb-8">
                 <ul class="space-y-1">
-                    @foreach (config('sios.nav_items') as $item)
+                    @foreach (config('sies.nav_items') as $item)
                         @if (is_null($item['permission']) || auth()->user()->can($item['permission']))
                             @php
                                 $group = explode('.', $item['route'])[0];
@@ -63,7 +63,7 @@
                     @endforeach
                 </ul>
 
-                @foreach (config('sios.nav_sections') as $section)
+                @foreach (config('sies.nav_sections') as $section)
                     @php
                         $visibleItems = collect($section['items'])->filter(
                             fn ($item) => is_null($item['permission']) || auth()->user()->can($item['permission'])
@@ -111,7 +111,7 @@
                 </button>
 
                 <div class="hidden text-sm text-gray-500 lg:block">
-                    Sistema Integral de Operación y Servicios
+                    Sistema de Información, Estadística y Servicios
                 </div>
 
                 <div class="relative ms-auto" x-data="{ open: false }" x-on:keydown.escape="open = false">
@@ -158,6 +158,11 @@
 
                 {{ $slot }}
             </main>
+
+            <footer class="border-t border-gray-200 bg-white px-4 py-3 text-center text-xs text-gray-400 sm:px-6">
+                SIES &middot; Sistema de Información, Estadística y Servicios &mdash;
+                Sistema desarrollado por la Coordinación de Operación GECDMX &middot; V.1.0.0
+            </footer>
         </div>
     </div>
 </body>

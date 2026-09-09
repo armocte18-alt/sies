@@ -1,4 +1,4 @@
-<x-sios-layout :title="'Dashboard'">
+<x-sies-layout :title="'Dashboard'">
     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
         Sistema Integral de Operación y Servicios (SIOS)
     </h1>
@@ -103,4 +103,4 @@
             @endif
         </section>
     </div>
-</x-sios-layout>
+</x-sies-layout>
