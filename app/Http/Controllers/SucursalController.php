@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\SucursalesExport;
 use App\Http\Requests\Sucursales\StoreSucursalRequest;
 use App\Http\Requests\Sucursales\UpdateIdentificacionRequest;
+use App\Models\Alcaldia;
 use App\Models\Sucursal;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,13 @@ class SucursalController extends Controller
 
     private const OPCIONES_POR_PAGINA = [15, 25, 50, 100];
 
+    private const ESTATUS_LABELS = [
+        'activa' => 'Activa',
+        'inactiva' => 'Inactiva',
+        'suspendida' => 'Suspendida',
+        'en_apertura' => 'En apertura',
+    ];
+
     public function index(Request $request): View
     {
         $this->authorize('viewAny', Sucursal::class);
@@ -45,7 +53,10 @@ class SucursalController extends Controller
     {
         $this->authorize('viewAny', Sucursal::class);
 
-        return Excel::download(new SucursalesExport($this->sucursalesFiltradas($request)), 'sucursales.xlsx');
+        $sucursales = $this->sucursalesFiltradas($request)->get();
+        $filtrosResumen = $this->resumenFiltros($request);
+
+        return Excel::download(new SucursalesExport($sucursales, $filtrosResumen), 'directorio-sucursales.xlsx');
     }
 
     public function exportarPdf(Request $request): Response
@@ -53,10 +64,33 @@ class SucursalController extends Controller
         $this->authorize('viewAny', Sucursal::class);
 
         $sucursales = $this->sucursalesFiltradas($request)->get();
+        $filtrosResumen = $this->resumenFiltros($request);
 
-        $pdf = Pdf::loadView('sucursales.pdfs.listado', compact('sucursales'))->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('sucursales.pdfs.listado', compact('sucursales', 'filtrosResumen'))->setPaper('a4', 'landscape');
 
-        return $pdf->download('sucursales.pdf');
+        return $pdf->download('directorio-sucursales.pdf');
+    }
+
+    /**
+     * Resume en una línea los filtros con los que se generó la exportación
+     * (estatus siempre se indica, incluso cuando es "Todas"), para que el
+     * documento deje constancia de su alcance sin necesitar una columna de
+     * Estatus repetida en cada fila.
+     */
+    private function resumenFiltros(Request $request): string
+    {
+        $partes = [];
+        $partes[] = 'Estatus: '.(self::ESTATUS_LABELS[$request->query('estatus')] ?? 'Todas');
+
+        if ($request->filled('alcaldia')) {
+            $partes[] = 'Alcaldía: '.(Alcaldia::find($request->query('alcaldia'))?->nombre ?? '—');
+        }
+
+        if ($request->filled('buscar')) {
+            $partes[] = 'Búsqueda: "'.$request->query('buscar').'"';
+        }
+
+        return implode('   ·   ', $partes);
     }
 
     /**
@@ -73,12 +107,36 @@ class SucursalController extends Controller
             ->select('sucursales.*')
             ->leftJoin('sucursal_ubicaciones', 'sucursal_ubicaciones.sucursal_id', '=', 'sucursales.id')
             ->leftJoin('alcaldias', 'alcaldias.id', '=', 'sucursal_ubicaciones.alcaldia_id')
+            ->leftJoin('sucursal_operaciones', 'sucursal_operaciones.sucursal_id', '=', 'sucursales.id')
+            ->leftJoin('empleados', 'empleados.id', '=', 'sucursales.titular_empleado_id')
             ->with(['ubicacion.alcaldia', 'operacion', 'finanzas', 'titular'])
             ->when($request->query('buscar'), function ($query, $buscar) {
-                $query->where(function ($q) use ($buscar) {
-                    $q->where('sucursales.nombre_oficial', 'like', "%{$buscar}%")
-                        ->orWhere('sucursales.clave_financiera', 'like', "%{$buscar}%");
-                });
+                // Busca en registro, administración, domicilio, alcaldía,
+                // horario y titular — no solo nombre/clave. Se parte en
+                // palabras y cada una se exige por separado (AND entre
+                // palabras, OR entre columnas) para que un nombre completo
+                // como "Gonzalez Reyes" encuentre coincidencias aunque el
+                // apellido paterno y el materno vivan en columnas distintas.
+                $palabras = preg_split('/\s+/', trim($buscar), -1, PREG_SPLIT_NO_EMPTY);
+
+                foreach ($palabras as $palabra) {
+                    $query->where(function ($q) use ($palabra) {
+                        $q->where('sucursales.nombre_oficial', 'like', "%{$palabra}%")
+                            ->orWhere('sucursales.clave_financiera', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.calle', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.colonia', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.entre_calle_1', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.entre_calle_2', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.referencia_visual', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_ubicaciones.codigo_postal', 'like', "%{$palabra}%")
+                            ->orWhere('alcaldias.nombre', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_operaciones.dias_laborables', 'like', "%{$palabra}%")
+                            ->orWhere('sucursal_operaciones.dias_guardia', 'like', "%{$palabra}%")
+                            ->orWhere('empleados.nombre', 'like', "%{$palabra}%")
+                            ->orWhere('empleados.apellido_paterno', 'like', "%{$palabra}%")
+                            ->orWhere('empleados.apellido_materno', 'like', "%{$palabra}%");
+                    });
+                }
             })
             ->when($request->query('alcaldia'), fn ($query, $alcaldiaId) => $query->where('alcaldias.id', $alcaldiaId))
             ->when($request->query('estatus'), fn ($query, $estatus) => $query->where('sucursales.estatus_operativo', $estatus))

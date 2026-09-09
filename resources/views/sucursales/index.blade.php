@@ -15,10 +15,10 @@
         <input type="hidden" name="alcaldia" value="{{ request('alcaldia') }}">
 
         <div>
-            <label for="buscar" class="sr-only">Buscar sucursal por nombre o clave financiera</label>
+            <label for="buscar" class="sr-only">Buscar por registro, administración, domicilio, alcaldía, horario o titular</label>
             <div class="flex max-w-md gap-2">
                 <input type="search" id="buscar" name="buscar" x-model="valor"
-                    placeholder="Buscar por nombre o clave financiera..."
+                    placeholder="Buscar por registro, administración, domicilio, alcaldía..."
                     x-on:input="buscar()"
                     autocomplete="off"
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">

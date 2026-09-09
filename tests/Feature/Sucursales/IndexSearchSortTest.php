@@ -2,7 +2,11 @@
 
 namespace Tests\Feature\Sucursales;
 
+use App\Models\Alcaldia;
+use App\Models\Empleado;
 use App\Models\Sucursal;
+use App\Models\SucursalOperacion;
+use App\Models\SucursalUbicacion;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,6 +50,58 @@ class IndexSearchSortTest extends TestCase
 
         $response->assertOk()->assertSee('Tlalpan Centro');
         $response->assertDontSee('SIES | GECDMX');
+    }
+
+    public function test_buscar_matches_alcaldia_domicilio_horario_and_titular(): void
+    {
+        $conEsto = Sucursal::factory()->create(['nombre_oficial' => 'Con Esto', 'clave_financiera' => '09200']);
+        $sinEsto = Sucursal::factory()->create(['nombre_oficial' => 'Sin Esto', 'clave_financiera' => '09201']);
+
+        // Minúsculas para no depender de que SQLite (motor de pruebas) pliegue
+        // mayúsculas acentuadas igual que MySQL (producción) al comparar LIKE.
+        $alcaldia = Alcaldia::create(['nombre' => 'alcaldía única de prueba']);
+        SucursalUbicacion::create([
+            'sucursal_id' => $conEsto->id,
+            'calle' => 'calle domicilio unico de prueba',
+            'colonia' => 'colonia cualquiera',
+            'alcaldia_id' => $alcaldia->id,
+            'codigo_postal' => '00000',
+        ]);
+        SucursalOperacion::create([
+            'sucursal_id' => $conEsto->id,
+            'dias_laborables' => 'horario unico de prueba',
+        ]);
+        $titular = Empleado::factory()->create(['nombre' => 'Titularunico', 'apellido_paterno' => 'DePrueba']);
+        $conEsto->update(['titular_empleado_id' => $titular->id]);
+
+        $user = User::factory()->create();
+        $user->assignRole('supervision');
+
+        foreach (['alcaldía única de prueba', 'domicilio unico', 'horario unico de prueba', 'titularunico'] as $termino) {
+            $this->actingAs($user)
+                ->get(route('sucursales.index', ['buscar' => $termino]))
+                ->assertOk()
+                ->assertSee('Con Esto')
+                ->assertDontSee('Sin Esto');
+        }
+    }
+
+    public function test_buscar_matches_a_full_name_split_across_apellido_paterno_and_materno(): void
+    {
+        $conTitular = Sucursal::factory()->create(['nombre_oficial' => 'Con Titular', 'clave_financiera' => '09210']);
+        $sinTitular = Sucursal::factory()->create(['nombre_oficial' => 'Sin Titular', 'clave_financiera' => '09211']);
+
+        $titular = Empleado::factory()->create(['nombre' => 'Evelin', 'apellido_paterno' => 'Gonzalez', 'apellido_materno' => 'Reyes']);
+        $conTitular->update(['titular_empleado_id' => $titular->id]);
+
+        $user = User::factory()->create();
+        $user->assignRole('supervision');
+
+        $this->actingAs($user)
+            ->get(route('sucursales.index', ['buscar' => 'gonzalez reyes']))
+            ->assertOk()
+            ->assertSee('Con Titular')
+            ->assertDontSee('Sin Titular');
     }
 
     public function test_estatus_filter_shows_only_matching_sucursales(): void

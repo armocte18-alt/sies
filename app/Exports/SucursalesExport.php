@@ -2,51 +2,29 @@
 
 namespace App\Exports;
 
-use App\Models\Sucursal;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SucursalesExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithStyles
+/**
+ * Genera el .xlsx a partir de una vista Blade (una sola <table> con el
+ * membrete institucional y el mismo desglose de domicilio/horario en
+ * varias filas por celdas combinadas) para que se vea igual que el PDF
+ * y que el "directorio" impreso/copiado desde sios-app-web.
+ */
+class SucursalesExport implements FromView, ShouldAutoSize
 {
-    public function __construct(private readonly Builder $query) {}
+    public function __construct(
+        private readonly Collection $sucursales,
+        private readonly string $filtrosResumen,
+    ) {}
 
-    public function collection(): Collection
+    public function view(): View
     {
-        return $this->query->get();
-    }
-
-    public function headings(): array
-    {
-        return ['Registro', 'Nombre oficial', 'Alcaldía', 'Domicilio completo', 'Entre calles', 'Referencia', 'Horario', 'Horario de guardia', 'Titular', 'Estatus'];
-    }
-
-    /**
-     * @param  Sucursal  $sucursal
-     */
-    public function map($sucursal): array
-    {
-        return [
-            $sucursal->clave_financiera,
-            $sucursal->nombre_oficial,
-            $sucursal->ubicacion?->alcaldia?->nombre ?? '',
-            $sucursal->ubicacion?->domicilioCompleto() ?? '',
-            $sucursal->ubicacion?->entreCalles() ?? '',
-            $sucursal->ubicacion?->referencia_visual ?? '',
-            $sucursal->operacion?->resumenHorario() ?? '',
-            $sucursal->operacion?->resumenGuardia() ?? '',
-            $sucursal->titular?->nombre_completo ?? 'Sin encargado',
-            ucfirst($sucursal->estatus_operativo),
-        ];
-    }
-
-    public function styles(Worksheet $sheet): array
-    {
-        return [1 => ['font' => ['bold' => true]]];
+        return view('sucursales.exports.listado', [
+            'sucursales' => $this->sucursales,
+            'filtrosResumen' => $this->filtrosResumen,
+        ]);
     }
 }

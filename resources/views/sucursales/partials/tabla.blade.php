@@ -4,7 +4,7 @@
         <thead class="bg-brand-green">
             <tr>
                 <x-sortable-th field="clave" label="Registro" on-dark />
-                <x-sortable-th field="nombre" label="Sucursal" on-dark />
+                <x-sortable-th field="nombre" label="Administración" on-dark />
                 <th scope="col" class="px-4 py-3 text-left font-semibold text-white">Ubicación</th>
                 <x-sortable-th field="alcaldia" label="Alcaldía" on-dark />
                 <th scope="col" class="px-4 py-3 text-left font-semibold text-white">Horario</th>

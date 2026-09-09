@@ -98,4 +98,26 @@ class Sucursal extends Model
     {
         return $this->hasMany(SucursalEquipamientoReparto::class);
     }
+
+    /**
+     * Domicilio, "entre calles" y referencia visual como líneas separadas,
+     * listas para unir con <br> (PDF) o repartir en varias filas con
+     * rowspan (Excel) — una sola fuente de verdad para ambas exportaciones.
+     */
+    public function lineasUbicacion(): array
+    {
+        return collect([
+            $this->ubicacion?->domicilioCompleto(),
+            $this->ubicacion?->entreCalles(),
+            $this->ubicacion?->referencia_visual ? "Ref: {$this->ubicacion->referencia_visual}" : null,
+        ])->filter()->values()->all();
+    }
+
+    public function lineasHorario(): array
+    {
+        return collect([
+            $this->operacion?->resumenHorario(),
+            $this->operacion?->resumenGuardia(),
+        ])->filter()->values()->all();
+    }
 }
