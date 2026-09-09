@@ -2,27 +2,25 @@
     <h1 class="text-2xl font-bold text-gray-900">Mantenimientos</h1>
     <p class="mt-1 text-sm text-gray-500">Órdenes de mantenimiento a sucursales, con materiales, personal asignado y bitácora de cambios.</p>
 
-    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <div class="rounded-lg bg-white p-4 shadow-sm">
-            <p class="text-xs font-medium text-gray-500">Total {{ now()->year }}</p>
-            <p class="mt-1 text-2xl font-bold text-gray-900">{{ $kpis['total'] }}</p>
-        </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
-            <p class="text-xs font-medium text-gray-500">Pendientes</p>
-            <p class="mt-1 text-2xl font-bold text-gray-500">{{ $kpis['pendientes'] }}</p>
-        </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
-            <p class="text-xs font-medium text-gray-500">En proceso</p>
-            <p class="mt-1 text-2xl font-bold text-amber-600">{{ $kpis['en_proceso'] }}</p>
-        </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
-            <p class="text-xs font-medium text-gray-500">Completados</p>
-            <p class="mt-1 text-2xl font-bold text-emerald-600">{{ $kpis['completados'] }}</p>
-        </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
-            <p class="text-xs font-medium text-gray-500">Costo total</p>
-            <p class="mt-1 text-2xl font-bold text-gray-900">${{ number_format($kpis['costo_total'], 2) }}</p>
-        </div>
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <x-dashboard.stat-card label="Total {{ now()->year }}" :value="$kpis['total']" color="bg-brand-green">
+            <x-nav-icon name="wrench" class="h-7 w-7" />
+        </x-dashboard.stat-card>
+        <x-dashboard.stat-card label="Pendientes" :value="$kpis['pendientes']" color="bg-gray-500">
+            <x-nav-icon name="clock" class="h-7 w-7" />
+        </x-dashboard.stat-card>
+        <x-dashboard.stat-card label="En proceso" :value="$kpis['en_proceso']" color="bg-brand-gold">
+            <x-nav-icon name="wrench" class="h-7 w-7" />
+        </x-dashboard.stat-card>
+        <x-dashboard.stat-card label="Completados" :value="$kpis['completados']" color="bg-emerald-600">
+            <x-nav-icon name="check-circle" class="h-7 w-7" />
+        </x-dashboard.stat-card>
+        <x-dashboard.stat-card label="En riesgo" :value="$kpis['en_riesgo']" color="bg-brand-accent">
+            <x-nav-icon name="shield" class="h-7 w-7" />
+        </x-dashboard.stat-card>
+        <x-dashboard.stat-card label="Costo total" :value="'$'.number_format($kpis['costo_total'], 2)" color="bg-slate-800">
+            <x-nav-icon name="chart" class="h-7 w-7" />
+        </x-dashboard.stat-card>
     </div>
 
     <form method="GET" action="{{ route('mantenimientos.index') }}" x-data class="mt-6 flex flex-wrap items-end gap-3">

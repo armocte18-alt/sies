@@ -35,6 +35,8 @@
     @if (session('error')) data-flash-error="{{ session('error') }}" @endif
     @if (session('warning')) data-flash-warning="{{ session('warning') }}" @endif
 >
+    <div class="h-1.5 w-full bg-gradient-to-r from-brand-green via-brand-gold to-brand-accent" aria-hidden="true"></div>
+
     <a href="#contenido-principal"
         class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:shadow-lg">
         Saltar al contenido principal
@@ -80,9 +82,9 @@
                             <li>
                                 <a href="{{ route($item['route']) }}" title="{{ $item['label'] }}"
                                     @class([
-                                        'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition',
-                                        'bg-white/15 text-white' => $active,
-                                        'text-white/85 hover:bg-white/10 hover:text-white' => !$active,
+                                        'flex items-center gap-3 rounded-md border-l-4 px-3 py-2 text-sm font-medium transition',
+                                        'border-brand-gold bg-white/15 text-white' => $active,
+                                        'border-transparent text-white/85 hover:bg-white/10 hover:text-white' => !$active,
                                     ])
                                     @if ($active) aria-current="page" @endif
                                 >
@@ -103,7 +105,7 @@
 
                     @if ($visibleItems->isNotEmpty())
                         <div>
-                            <p class="sidebar-label px-3 text-xs font-semibold uppercase tracking-wider text-white/60">
+                            <p class="sidebar-label px-3 text-xs font-semibold uppercase tracking-wider text-brand-gold-light/90">
                                 {{ $section['title'] }}
                             </p>
                             <ul class="mt-2 space-y-1">
@@ -111,9 +113,9 @@
                                     <li>
                                         <a href="{{ route($item['route']) }}" title="{{ $item['label'] }}"
                                             @class([
-                                                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition',
-                                                'bg-white/15 text-white' => request()->routeIs($item['route']),
-                                                'text-white/85 hover:bg-white/10 hover:text-white' => !request()->routeIs($item['route']),
+                                                'flex items-center gap-3 rounded-md border-l-4 px-3 py-2 text-sm font-medium transition',
+                                                'border-brand-gold bg-white/15 text-white' => request()->routeIs($item['route']),
+                                                'border-transparent text-white/85 hover:bg-white/10 hover:text-white' => !request()->routeIs($item['route']),
                                             ])
                                             @if (request()->routeIs($item['route'])) aria-current="page" @endif
                                         >

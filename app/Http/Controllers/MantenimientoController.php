@@ -40,6 +40,7 @@ class MantenimientoController extends Controller
             'pendientes' => (clone $base)->where('estatus', 'pendiente')->count(),
             'en_proceso' => (clone $base)->where('estatus', 'en_proceso')->count(),
             'completados' => (clone $base)->where('estatus', 'completado')->count(),
+            'en_riesgo' => (clone $base)->get()->filter->enRiesgo()->count(),
             'costo_total' => (float) (clone $base)->sum(DB::raw('costo_mano_obra + costo_materiales')),
         ];
 
