@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alcaldia;
 use App\Models\Empleado;
+use App\Models\EventoCalendario;
 use App\Models\Sucursal;
 use Illuminate\View\View;
 
@@ -26,12 +27,17 @@ class DashboardController extends Controller
             ->filter(fn (Alcaldia $alcaldia) => $alcaldia->sucursales_count > 0)
             ->values();
 
+        $eventosProximos = EventoCalendario::query()
+            ->whereBetween('fecha_inicio', [now()->startOfDay(), now()->addDays(7)->endOfDay()])
+            ->count();
+
         return view('dashboard', [
             'sucursalesActivas' => $sucursalesActivas,
             'totalEmpleados' => $totalEmpleados,
             'balanceAcumulado' => (float) $balanceAcumulado,
             'sucursalesPorAlcaldia' => $sucursalesPorAlcaldia,
             'sucursales' => Sucursal::with('ubicacion')->get(),
+            'eventosProximos' => $eventosProximos,
         ]);
     }
 }

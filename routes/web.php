@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccesosController;
+use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\CircularController;
 use App\Http\Controllers\DashboardController;
@@ -95,6 +96,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::prefix('calendario')->name('calendario.')->middleware('can:calendario.ver')->group(function () {
+        Route::get('/', [CalendarioController::class, 'index'])->name('index');
+
+        Route::middleware('can:calendario.gestionar')->group(function () {
+            Route::post('/', [CalendarioController::class, 'store'])->name('store');
+            Route::delete('/{evento}', [CalendarioController::class, 'destroy'])->name('destroy');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -109,7 +119,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     $modulosPendientes = [
         ['uri' => 'minutarios', 'name' => 'minutarios.index', 'permission' => 'minutarios.ver', 'titulo' => 'Minutarios'],
         ['uri' => 'empleados', 'name' => 'empleados.index', 'permission' => 'empleados.ver', 'titulo' => 'Empleados'],
-        ['uri' => 'calendario', 'name' => 'calendario.index', 'permission' => 'calendario.ver', 'titulo' => 'Calendario de Eventos'],
         ['uri' => 'tarjetas', 'name' => 'tarjetas.index', 'permission' => 'tarjetas.ver', 'titulo' => 'Control de Tarjetas'],
         ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],

@@ -43,7 +43,7 @@
 
         <x-dashboard.stat-card
             label="Eventos Próximos (7 días)"
-            value="—"
+            :value="$eventosProximos"
             color="bg-gray-500"
             :href="route('calendario.index')"
         >
