@@ -18,6 +18,7 @@ use App\Http\Controllers\Sucursales\FinanzasController;
 use App\Http\Controllers\Sucursales\HorariosController;
 use App\Http\Controllers\Sucursales\InmuebleController;
 use App\Http\Controllers\Sucursales\RepartoController;
+use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\Sucursales\UbicacionController;
 use Illuminate\Support\Facades\Route;
 
@@ -158,6 +159,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::prefix('vehiculos')->name('vehiculos.')->middleware('can:vehiculos.ver')->group(function () {
+        Route::get('/', [VehiculoController::class, 'index'])->name('index');
+        Route::get('/km-sugerido/{vehiculo}', [VehiculoController::class, 'kmSugerido'])->name('km-sugerido');
+        Route::get('/solicitudes/{solicitud}/responsiva', [VehiculoController::class, 'responsivaPdf'])->name('solicitudes.responsiva');
+
+        Route::middleware('can:vehiculos.gestionar')->group(function () {
+            Route::post('/', [VehiculoController::class, 'storeVehiculo'])->name('store');
+            Route::put('/{vehiculo}', [VehiculoController::class, 'updateVehiculo'])->name('update');
+
+            Route::post('/conductores', [VehiculoController::class, 'storeConductor'])->name('conductores.store');
+            Route::put('/conductores/{conductor}', [VehiculoController::class, 'updateConductor'])->name('conductores.update');
+
+            Route::post('/solicitudes', [VehiculoController::class, 'storeSolicitud'])->name('solicitudes.store');
+            Route::patch('/solicitudes/{solicitud}/autorizar', [VehiculoController::class, 'autorizarSolicitud'])->name('solicitudes.autorizar');
+            Route::patch('/solicitudes/{solicitud}/rechazar', [VehiculoController::class, 'rechazarSolicitud'])->name('solicitudes.rechazar');
+            Route::patch('/solicitudes/{solicitud}/devolucion', [VehiculoController::class, 'devolucionSolicitud'])->name('solicitudes.devolucion');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -170,7 +190,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
-        ['uri' => 'vehiculos', 'name' => 'vehiculos.index', 'permission' => 'vehiculos.ver', 'titulo' => 'Vehículos Oficiales'],
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
         ['uri' => 'kardex', 'name' => 'kardex.index', 'permission' => 'kardex.gestionar', 'titulo' => 'Ajustes Kárdex'],
     ];

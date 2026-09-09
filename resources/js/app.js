@@ -69,6 +69,29 @@ Alpine.data('busquedaEnVivo', () => ({
     },
 }));
 
+/**
+ * Muestra el kilometraje inicial sugerido al elegir un vehículo en el
+ * formulario de nueva solicitud (replica el helper AJAX de sios-app-web).
+ */
+Alpine.data('kmSugerido', () => ({
+    valor: null,
+
+    async cargar(vehiculoId) {
+        if (!vehiculoId) {
+            this.valor = null;
+
+            return;
+        }
+
+        const response = await fetch('/vehiculos/km-sugerido/' + vehiculoId);
+
+        if (response.ok) {
+            const datos = await response.json();
+            this.valor = datos.km_inicial;
+        }
+    },
+}));
+
 let toastSequence = 0;
 
 Alpine.store('toasts', {
