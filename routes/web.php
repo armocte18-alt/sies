@@ -5,6 +5,7 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\CircularController;
 use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\MetasAnalisisController;
 use App\Http\Controllers\MinutarioController;
 use App\Http\Controllers\TarjetaController;
@@ -178,6 +179,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
+    Route::prefix('mantenimientos')->name('mantenimientos.')->middleware('can:mantenimientos.ver')->group(function () {
+        Route::get('/', [MantenimientoController::class, 'index'])->name('index');
+
+        Route::middleware('can:mantenimientos.gestionar')->group(function () {
+            Route::post('/', [MantenimientoController::class, 'store'])->name('store');
+            Route::put('/{mantenimiento}', [MantenimientoController::class, 'update'])->name('update');
+            Route::delete('/{mantenimiento}', [MantenimientoController::class, 'destroy'])->name('destroy');
+            Route::patch('/{mantenimiento}/estatus', [MantenimientoController::class, 'cambiarEstatus'])->name('estatus');
+
+            Route::post('/{mantenimiento}/materiales', [MantenimientoController::class, 'storeMaterial'])->name('materiales.store');
+            Route::delete('/{mantenimiento}/materiales/{material}', [MantenimientoController::class, 'destroyMaterial'])->name('materiales.destroy');
+
+            Route::post('/{mantenimiento}/personal', [MantenimientoController::class, 'storePersonal'])->name('personal.store');
+            Route::delete('/{mantenimiento}/personal/{empleado}', [MantenimientoController::class, 'destroyPersonal'])->name('personal.destroy');
+
+            Route::post('/tipos', [MantenimientoController::class, 'storeTipo'])->name('tipos.store');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -190,7 +210,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
-        ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
         ['uri' => 'kardex', 'name' => 'kardex.index', 'permission' => 'kardex.gestionar', 'titulo' => 'Ajustes Kárdex'],
     ];
 
