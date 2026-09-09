@@ -64,6 +64,24 @@ return [
             ]) : [],
         ],
 
+        // Read-only access to the legacy production system, used only by
+        // one-off data-migration seeders (see database/seeders/Legacy).
+        // Not wired into the default migrate/seed flow — only present when
+        // SIOS_LEGACY_DB_* is set locally, which .env.example intentionally
+        // does not define.
+        'sios_legacy' => [
+            'driver' => 'mysql',
+            'host' => env('SIOS_LEGACY_DB_HOST', '127.0.0.1'),
+            'port' => env('SIOS_LEGACY_DB_PORT', '3306'),
+            'database' => env('SIOS_LEGACY_DB_DATABASE', 'sios_app_web'),
+            'username' => env('SIOS_LEGACY_DB_USERNAME', 'root'),
+            'password' => env('SIOS_LEGACY_DB_PASSWORD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

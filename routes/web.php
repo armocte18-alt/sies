@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccesosController;
 use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SucursalController;
@@ -52,6 +53,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->where('catalogo', \App\Support\CatalogoRhRegistro::patronRuta());
     });
 
+    Route::prefix('directorios')->name('directorios.')->middleware('can:directorios.ver')->group(function () {
+        Route::get('/', [DirectorioController::class, 'index'])->name('index');
+
+        Route::middleware('can:directorios.gestionar')->group(function () {
+            Route::post('/gerencias', [DirectorioController::class, 'storeGerencia'])->name('gerencias.store');
+            Route::put('/gerencias/{gerencia}', [DirectorioController::class, 'updateGerencia'])->name('gerencias.update');
+            Route::patch('/gerencias/{gerencia}/estado', [DirectorioController::class, 'toggleGerencia'])->name('gerencias.estado');
+
+            Route::post('/areas-centrales', [DirectorioController::class, 'storeAreaCentral'])->name('areas.store');
+            Route::put('/areas-centrales/{areaCentral}', [DirectorioController::class, 'updateAreaCentral'])->name('areas.update');
+            Route::patch('/areas-centrales/{areaCentral}/estado', [DirectorioController::class, 'toggleAreaCentral'])->name('areas.estado');
+
+            Route::post('/externos', [DirectorioController::class, 'storePersonalExterno'])->name('externos.store');
+            Route::put('/externos/{personalExterno}', [DirectorioController::class, 'updatePersonalExterno'])->name('externos.update');
+            Route::patch('/externos/{personalExterno}/estado', [DirectorioController::class, 'togglePersonalExterno'])->name('externos.estado');
+        });
+    });
+
     Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
         Route::get('/', [AccesosController::class, 'index'])->name('index');
         Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
@@ -64,7 +83,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
-        ['uri' => 'directorios', 'name' => 'directorios.index', 'permission' => 'directorios.ver', 'titulo' => 'Directorios'],
         ['uri' => 'minutarios', 'name' => 'minutarios.index', 'permission' => 'minutarios.ver', 'titulo' => 'Minutarios'],
         ['uri' => 'empleados', 'name' => 'empleados.index', 'permission' => 'empleados.ver', 'titulo' => 'Empleados'],
         ['uri' => 'circulares', 'name' => 'circulares.index', 'permission' => 'circulares.ver', 'titulo' => 'Circulares'],

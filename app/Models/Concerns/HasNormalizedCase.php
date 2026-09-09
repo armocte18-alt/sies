@@ -35,16 +35,22 @@ trait HasNormalizedCase
     {
         static::saving(function ($model) {
             foreach ($model->getAttributes() as $key => $value) {
-                if (is_string($value) && static::isNormalizedCaseField($key)) {
+                if (is_string($value) && $model->isNormalizedCaseField($key)) {
                     $model->attributes[$key] = mb_strtolower(trim($value), 'UTF-8');
                 }
             }
         });
     }
 
-    private static function isNormalizedCaseField(string $key): bool
+    private function isNormalizedCaseField(string $key): bool
     {
         if (in_array($key, self::$normalizedCaseExcludedKeys, true)) {
+            return false;
+        }
+
+        // Array/JSON/collection-cast columns (e.g. a list of phone numbers)
+        // aren't free text — skip them regardless of their name.
+        if ($this->hasCast($key, ['array', 'json', 'collection', 'object'])) {
             return false;
         }
 
@@ -61,7 +67,7 @@ trait HasNormalizedCase
     {
         $value = parent::getAttribute($key);
 
-        if ($key !== $this->getKeyName() && is_string($value) && static::isNormalizedCaseField($key)) {
+        if ($key !== $this->getKeyName() && is_string($value) && $this->isNormalizedCaseField($key)) {
             return Str::title($value);
         }
 
