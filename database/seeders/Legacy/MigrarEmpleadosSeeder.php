@@ -51,7 +51,7 @@ class MigrarEmpleadosSeeder extends Seeder
                     'apellido_paterno' => Str::title($fila->a_paterno_employee),
                     'apellido_materno' => $fila->a_materno_employee ? Str::title($fila->a_materno_employee) : null,
                     'funcion_laboral' => $labores[$fila->labores_id] ?? null,
-                    'puesto' => $puestos[$fila->puesto_id] ?? null,
+                    'puesto' => $this->limpiaPuesto($puestos[$fila->puesto_id] ?? null),
                     'activo' => ! in_array(Str::lower((string) $fila->estatus_employee), ['baja', 'inactivo'], true),
                 ],
             );
@@ -81,5 +81,14 @@ class MigrarEmpleadosSeeder extends Seeder
             $sinSucursal,
             $titularesAsignados,
         ));
+    }
+
+    /**
+     * El catálogo legacy de puestos trae comillas de cierre triplicadas en
+     * algunos valores, p. ej. 'JEFE DE OFICINA TELEGRÁFICA "A"""'.
+     */
+    private function limpiaPuesto(?string $puesto): ?string
+    {
+        return $puesto ? preg_replace('/"+$/', '"', trim($puesto)) : null;
     }
 }
