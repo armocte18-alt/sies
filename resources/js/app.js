@@ -191,3 +191,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+/**
+ * Light/dark toggle. The chosen theme is written to a cookie (not
+ * localStorage) so the server can render the correct `dark` class on <html>
+ * on every request — no flash of the wrong theme on navigation, and no
+ * inline bootstrap script needed under the CSP.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('theme-toggle');
+
+    if (!toggle) {
+        return;
+    }
+
+    toggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        const theme = isDark ? 'oscuro' : 'claro';
+
+        document.cookie = `tema=${theme};path=/;max-age=31536000;samesite=lax`;
+        toggle.setAttribute('aria-label', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    });
+});

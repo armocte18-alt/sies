@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(SecurityHeaders::class);
         $middleware->web(append: [EnsureAccountIsActive::class]);
+        // Plain, non-sensitive UI preference set directly by client JS
+        // (document.cookie), not through a Laravel response — it isn't in
+        // Laravel's encrypted format, so it must be exempted or every
+        // request() ->cookie('tema') read silently comes back null.
+        $middleware->encryptCookies(except: ['tema']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

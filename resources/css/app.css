@@ -7,3 +7,93 @@
 [x-cloak] {
     display: none !important;
 }
+
+/*
+ * Dark mode retrofit.
+ *
+ * The app was built with light-mode utility classes hardcoded across many
+ * views (bg-white, text-gray-900, etc.) rather than paired dark: variants
+ * everywhere. Instead of touching every view, we override those exact
+ * utility classes wherever they sit under a .dark ancestor (the compound
+ * selector already outranks the plain utility, no !important needed).
+ * The sidebar keeps its brand-green background in both themes on purpose.
+ */
+.dark {
+    color-scheme: dark;
+}
+
+.dark body {
+    background-color: #0f172a;
+}
+
+.dark .bg-white {
+    background-color: #1e293b;
+}
+
+.dark .bg-gray-50 {
+    background-color: #1e293b;
+}
+
+.dark .bg-gray-100 {
+    background-color: #0f172a;
+}
+
+.dark .bg-gray-900\/50 {
+    background-color: rgb(0 0 0 / 0.6);
+}
+
+.dark .text-gray-900 {
+    color: #f1f5f9;
+}
+
+.dark .text-gray-800 {
+    color: #e2e8f0;
+}
+
+.dark .text-gray-700 {
+    color: #cbd5e1;
+}
+
+.dark .text-gray-600 {
+    color: #94a3b8;
+}
+
+.dark .text-gray-500 {
+    color: #94a3b8;
+}
+
+.dark .text-gray-400 {
+    color: #64748b;
+}
+
+.dark .border-gray-100,
+.dark .border-gray-200 {
+    border-color: #334155;
+}
+
+.dark .border-gray-300 {
+    border-color: #475569;
+}
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: #334155;
+}
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover {
+    background-color: #334155;
+}
+
+.dark input:not([type='checkbox']):not([type='radio']),
+.dark select,
+.dark textarea {
+    background-color: #1e293b;
+    border-color: #475569;
+    color: #f1f5f9;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #64748b;
+}

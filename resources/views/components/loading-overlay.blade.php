@@ -1,6 +1,6 @@
 <div
     id="global-loading-overlay"
-    class="fixed inset-0 z-[200] hidden flex-col items-center justify-center gap-4 bg-white/80 backdrop-blur-sm"
+    class="fixed inset-0 z-[200] hidden flex-col items-center justify-center gap-4 bg-white/80 backdrop-blur-sm dark:bg-gray-900/80"
     role="status"
     aria-live="assertive"
 >
