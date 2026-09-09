@@ -1,6 +1,6 @@
 @props(['title' => null])
 <!DOCTYPE html>
-<html lang="es" class="{{ request()->cookie('tema') === 'oscuro' ? 'dark' : '' }}">
+<html lang="es" class="{{ request()->cookie('tema') === 'oscuro' ? 'dark' : '' }} {{ request()->cookie('sidebar') === 'colapsado' ? 'sidebar-collapsed' : '' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,7 +59,7 @@
         >
             <div class="flex items-center gap-3 px-5 py-4 text-lg font-bold">
                 <img src="{{ asset('images/favicon-48.png') }}" alt="" class="h-10 w-10 shrink-0" aria-hidden="true">
-                <span>SIES | GECDMX</span>
+                <span class="sidebar-label">SIES | GECDMX</span>
             </div>
 
             <nav aria-label="Navegación principal" class="flex-1 space-y-6 px-3 pb-8">
@@ -71,7 +71,7 @@
                                 $active = request()->routeIs($item['route']) || request()->routeIs("{$group}.*");
                             @endphp
                             <li>
-                                <a href="{{ route($item['route']) }}"
+                                <a href="{{ route($item['route']) }}" title="{{ $item['label'] }}"
                                     @class([
                                         'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition',
                                         'bg-white/15 text-white' => $active,
@@ -80,7 +80,7 @@
                                     @if ($active) aria-current="page" @endif
                                 >
                                     <x-nav-icon :name="$item['icon']" />
-                                    {{ $item['label'] }}
+                                    <span class="sidebar-label">{{ $item['label'] }}</span>
                                 </a>
                             </li>
                         @endif
@@ -96,13 +96,13 @@
 
                     @if ($visibleItems->isNotEmpty())
                         <div>
-                            <p class="px-3 text-xs font-semibold uppercase tracking-wider text-white/60">
+                            <p class="sidebar-label px-3 text-xs font-semibold uppercase tracking-wider text-white/60">
                                 {{ $section['title'] }}
                             </p>
                             <ul class="mt-2 space-y-1">
                                 @foreach ($visibleItems as $item)
                                     <li>
-                                        <a href="{{ route($item['route']) }}"
+                                        <a href="{{ route($item['route']) }}" title="{{ $item['label'] }}"
                                             @class([
                                                 'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition',
                                                 'bg-white/15 text-white' => request()->routeIs($item['route']),
@@ -111,7 +111,7 @@
                                             @if (request()->routeIs($item['route'])) aria-current="page" @endif
                                         >
                                             <x-nav-icon :name="$item['icon']" />
-                                            {{ $item['label'] }}
+                                            <span class="sidebar-label">{{ $item['label'] }}</span>
                                         </a>
                                     </li>
                                 @endforeach
@@ -120,6 +120,15 @@
                     @endif
                 @endforeach
             </nav>
+
+            <button type="button" id="sidebar-toggle"
+                class="hidden shrink-0 items-center justify-center gap-2 border-t border-white/10 py-3 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white lg:flex"
+                aria-label="Colapsar barra lateral">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+                </svg>
+                <span class="sidebar-label">Colapsar</span>
+            </button>
         </aside>
 
         <div class="flex min-h-screen flex-1 flex-col">

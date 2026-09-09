@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // (document.cookie), not through a Laravel response — it isn't in
         // Laravel's encrypted format, so it must be exempted or every
         // request() ->cookie('tema') read silently comes back null.
-        $middleware->encryptCookies(except: ['tema']);
+        $middleware->encryptCookies(except: ['tema', 'sidebar']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -9,6 +9,29 @@
 }
 
 /*
+ * Sidebar colapsable (solo escritorio, lg+). El estado se guarda en la
+ * cookie "sidebar" (igual que "tema") y se aplica como clase en <html> para
+ * que el servidor la renderice de una vez, sin parpadeo al navegar.
+ */
+#sidebar {
+    transition: width 150ms ease-in-out;
+}
+
+@media (min-width: 1024px) {
+    .sidebar-collapsed #sidebar {
+        width: 5rem;
+    }
+
+    .sidebar-collapsed #sidebar .sidebar-label {
+        display: none;
+    }
+
+    .sidebar-collapsed #sidebar-toggle svg {
+        transform: rotate(180deg);
+    }
+}
+
+/*
  * Dark mode retrofit.
  *
  * The app was built with light-mode utility classes hardcoded across many

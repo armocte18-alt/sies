@@ -213,3 +213,34 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.setAttribute('aria-label', isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
     });
 });
+
+/**
+ * Sidebar colapsable (escritorio). Igual que el tema, el estado se guarda en
+ * una cookie para que el servidor renderice el ancho correcto de una vez.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('sidebar-toggle');
+
+    if (!toggle) {
+        return;
+    }
+
+    const label = toggle.querySelector('.sidebar-label');
+
+    const setLabel = (collapsed) => {
+        const text = collapsed ? 'Expandir' : 'Colapsar';
+        toggle.setAttribute('aria-label', `${text} barra lateral`);
+        if (label) {
+            label.textContent = text;
+        }
+    };
+
+    setLabel(document.documentElement.classList.contains('sidebar-collapsed'));
+
+    toggle.addEventListener('click', () => {
+        const isCollapsed = document.documentElement.classList.toggle('sidebar-collapsed');
+
+        document.cookie = `sidebar=${isCollapsed ? 'colapsado' : 'expandido'};path=/;max-age=31536000;samesite=lax`;
+        setLabel(isCollapsed);
+    });
+});
