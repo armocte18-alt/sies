@@ -17,7 +17,7 @@
         <tbody class="divide-y divide-gray-100">
             @forelse ($sucursales as $sucursal)
                 <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 font-medium text-gray-900">{{ $sucursal->nombre_oficial }}</td>
+                    <td class="px-4 py-3 font-medium text-gray-900">{{ $sucursal->etiqueta }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $sucursal->ubicacion?->alcaldia?->nombre ?? '—' }}</td>
                     <td class="px-4 py-3 text-gray-600">{{ $sucursal->operacion?->telefono ?? '—' }}</td>
                     <td class="px-4 py-3 text-right">

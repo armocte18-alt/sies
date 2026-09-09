@@ -2,11 +2,11 @@
     $finanzas = $sucursal->finanzas;
 @endphp
 
-<x-sies-layout :title="$sucursal->nombre_oficial">
+<x-sies-layout :title="$sucursal->etiqueta">
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <a href="{{ route('sucursales.index') }}" class="text-sm text-brand-green hover:underline">&larr; Sucursales</a>
-            <h1 class="text-2xl font-bold text-gray-900">{{ $sucursal->nombre_oficial }}</h1>
+            <h1 class="text-2xl font-bold text-gray-900">{{ $sucursal->etiqueta }}</h1>
         </div>
         <x-sucursales.estatus-badge :estatus="$sucursal->estatus_operativo" class="text-sm" />
     </div>
