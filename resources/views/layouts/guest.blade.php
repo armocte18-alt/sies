@@ -25,9 +25,9 @@
 
         <div class="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-50 px-4 py-10">
             <img
-                src="{{ asset('images/FinabienLogo.png') }}"
-                alt="Financiera para el Bienestar"
-                class="h-28 w-auto sm:h-32"
+                src="{{ asset('images/fondo_finabien.png') }}"
+                alt="Secretaría de Hacienda y Crédito Público · Financiera para el Bienestar"
+                class="h-14 w-auto sm:h-16"
             >
 
             <div class="w-full max-w-md overflow-hidden rounded-xl border border-white/40 bg-brand-green/85 shadow-xl backdrop-blur-sm">
