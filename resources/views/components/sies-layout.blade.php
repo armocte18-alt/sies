@@ -54,15 +54,22 @@
         <aside
             id="sidebar"
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-            class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full transform flex-col overflow-y-auto bg-brand-green text-white transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:flex lg:translate-x-0"
+            class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full transform flex-col bg-brand-green text-white transition-transform duration-200 ease-in-out lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0"
             aria-label="Barra lateral"
         >
-            <div class="flex items-center gap-3 px-5 py-4 text-lg font-bold">
+            <div class="flex shrink-0 items-center gap-3 px-5 py-4 text-lg font-bold">
                 <img src="{{ asset('images/favicon-48.png') }}" alt="" class="h-10 w-10 shrink-0" aria-hidden="true">
                 <span class="sidebar-label">SIES | GECDMX</span>
+                <button type="button" data-sidebar-toggle
+                    class="ms-auto hidden shrink-0 rounded-md p-1.5 text-white/70 hover:bg-white/10 hover:text-white lg:block"
+                    aria-label="Colapsar barra lateral">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+                    </svg>
+                </button>
             </div>
 
-            <nav aria-label="Navegación principal" class="flex-1 space-y-6 px-3 pb-8">
+            <nav aria-label="Navegación principal" class="min-h-0 flex-1 space-y-6 overflow-y-auto px-3 pb-8">
                 <ul class="space-y-1">
                     @foreach (config('sies.nav_items') as $item)
                         @if (is_null($item['permission']) || auth()->user()->can($item['permission']))
@@ -121,7 +128,7 @@
                 @endforeach
             </nav>
 
-            <button type="button" id="sidebar-toggle"
+            <button type="button" data-sidebar-toggle
                 class="hidden shrink-0 items-center justify-center gap-2 border-t border-white/10 py-3 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white lg:flex"
                 aria-label="Colapsar barra lateral">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">

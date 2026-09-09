@@ -268,28 +268,31 @@ document.addEventListener('DOMContentLoaded', () => {
  * una cookie para que el servidor renderice el ancho correcto de una vez.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('sidebar-toggle');
+    const toggles = document.querySelectorAll('[data-sidebar-toggle]');
 
-    if (!toggle) {
+    if (!toggles.length) {
         return;
     }
 
-    const label = toggle.querySelector('.sidebar-label');
-
     const setLabel = (collapsed) => {
         const text = collapsed ? 'Expandir' : 'Colapsar';
-        toggle.setAttribute('aria-label', `${text} barra lateral`);
-        if (label) {
-            label.textContent = text;
-        }
+        toggles.forEach((toggle) => {
+            toggle.setAttribute('aria-label', `${text} barra lateral`);
+            const label = toggle.querySelector('.sidebar-label');
+            if (label) {
+                label.textContent = text;
+            }
+        });
     };
 
     setLabel(document.documentElement.classList.contains('sidebar-collapsed'));
 
-    toggle.addEventListener('click', () => {
-        const isCollapsed = document.documentElement.classList.toggle('sidebar-collapsed');
+    toggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const isCollapsed = document.documentElement.classList.toggle('sidebar-collapsed');
 
-        document.cookie = `sidebar=${isCollapsed ? 'colapsado' : 'expandido'};path=/;max-age=31536000;samesite=lax`;
-        setLabel(isCollapsed);
+            document.cookie = `sidebar=${isCollapsed ? 'colapsado' : 'expandido'};path=/;max-age=31536000;samesite=lax`;
+            setLabel(isCollapsed);
+        });
     });
 });

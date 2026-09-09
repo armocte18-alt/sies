@@ -26,7 +26,13 @@
         display: none;
     }
 
-    .sidebar-collapsed #sidebar-toggle svg {
+    /* Sin la etiqueta, el logo ya ocupa casi todo el ancho colapsado (5rem);
+       el botón de junto al logo se oculta y basta con el de hasta abajo. */
+    .sidebar-collapsed #sidebar > div [data-sidebar-toggle] {
+        display: none;
+    }
+
+    .sidebar-collapsed #sidebar [data-sidebar-toggle] svg {
         transform: rotate(180deg);
     }
 }
