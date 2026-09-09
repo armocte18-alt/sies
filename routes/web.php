@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccesosController;
 use App\Http\Controllers\CatalogosRhController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PlaceholderController;
@@ -51,6 +52,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->where('catalogo', \App\Support\CatalogoRhRegistro::patronRuta());
     });
 
+    Route::prefix('accesos')->name('accesos.')->middleware('can:accesos.gestionar')->group(function () {
+        Route::get('/', [AccesosController::class, 'index'])->name('index');
+        Route::get('/roles', [AccesosController::class, 'roles'])->name('roles');
+        Route::get('/{user}', [AccesosController::class, 'edit'])->name('edit');
+        Route::put('/{user}/roles', [AccesosController::class, 'updateRoles'])->name('roles.update');
+        Route::put('/{user}/permisos', [AccesosController::class, 'updatePermissions'])->name('permisos.update');
+        Route::patch('/{user}/estado', [AccesosController::class, 'toggleActive'])->name('estado.update');
+    });
+
     // Módulos del menú pendientes de desarrollo: la ruta ya queda protegida
     // por el permiso real que tendrá cada módulo cuando se implemente.
     $modulosPendientes = [
@@ -64,7 +74,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ['uri' => 'mantenimientos', 'name' => 'mantenimientos.index', 'permission' => 'mantenimientos.ver', 'titulo' => 'Mantenimientos'],
         ['uri' => 'metas', 'name' => 'metas.index', 'permission' => 'metas.ver', 'titulo' => 'Metas y Análisis'],
         ['uri' => 'kardex', 'name' => 'kardex.index', 'permission' => 'kardex.gestionar', 'titulo' => 'Ajustes Kárdex'],
-        ['uri' => 'accesos', 'name' => 'accesos.index', 'permission' => 'accesos.gestionar', 'titulo' => 'Control de Accesos'],
     ];
 
     foreach ($modulosPendientes as $modulo) {

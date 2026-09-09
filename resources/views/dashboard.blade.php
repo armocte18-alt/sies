@@ -1,12 +1,7 @@
 <x-sies-layout :title="'Dashboard'">
-    <div>
-        <p class="text-sm font-semibold uppercase tracking-wide text-brand-green">
-            Sistema de Información, Estadística y Servicios
-        </p>
-        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            SIES
-        </h1>
-    </div>
+    <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+        Panel principal
+    </h1>
 
     <div class="mt-4 rounded-lg border-l-4 border-brand-green bg-white p-5 shadow-sm">
         <p class="font-semibold text-gray-800">¡Bienvenido al sistema, {{ auth()->user()->name }}!</p>

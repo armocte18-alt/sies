@@ -134,8 +134,8 @@
                     </svg>
                 </button>
 
-                <div class="hidden text-sm text-gray-500 lg:block">
-                    Sistema de Información, Estadística y Servicios
+                <div class="hidden text-sm font-medium text-gray-500 lg:block">
+                    {{ $title ?? 'Panel principal' }}
                 </div>
 
                 <div
