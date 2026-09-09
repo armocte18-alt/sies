@@ -20,10 +20,10 @@
                 @forelse ($nivelesSalariales as $nivel)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-gray-600">{{ $nivel->consecutivo }}</td>
-                        <td class="px-4 py-3 font-medium text-gray-900">{{ $nivel->display('nivel_salarial') }}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ $nivel->nivel_salarial }}</td>
                         <td class="px-4 py-3 text-right text-gray-800">${{ number_format($nivel->sueldo_base, 2) }}</td>
                         <td class="px-4 py-3 text-right text-gray-800">${{ number_format($nivel->compensacion_garantizada, 2) }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $nivel->observaciones ? $nivel->display('observaciones') : '—' }}</td>
+                        <td class="px-4 py-3 text-gray-600">{{ $nivel->observaciones ?: '—' }}</td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex justify-end gap-3">
                                 <button type="button" x-show="editandoId !== {{ $nivel->id }}"
@@ -58,7 +58,7 @@
                                 </div>
                                 <div>
                                     <x-input-label value="Nivel salarial" />
-                                    <x-text-input name="nivel_salarial" type="text" class="mt-1 block w-full" required maxlength="50" value="{{ $nivel->display('nivel_salarial') }}" />
+                                    <x-text-input name="nivel_salarial" type="text" class="mt-1 block w-full" required maxlength="50" value="{{ $nivel->nivel_salarial }}" />
                                 </div>
                                 <div>
                                     <x-input-label value="Sueldo base" />
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="lg:col-span-1">
                                     <x-input-label value="Observaciones" />
-                                    <x-text-input name="observaciones" type="text" class="mt-1 block w-full" maxlength="255" value="{{ $nivel->observaciones ? $nivel->display('observaciones') : '' }}" />
+                                    <x-text-input name="observaciones" type="text" class="mt-1 block w-full" maxlength="255" value="{{ $nivel->observaciones }}" />
                                 </div>
 
                                 <div class="flex items-center gap-3">

@@ -14,8 +14,6 @@ class NivelSalarial extends Model
 
     protected $table = 'niveles_salariales';
 
-    protected $normalizedCase = ['nivel_salarial', 'observaciones'];
-
     protected function casts(): array
     {
         return [

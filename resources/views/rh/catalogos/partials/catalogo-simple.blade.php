@@ -21,8 +21,8 @@
             <tbody x-data="{ editandoId: null }" class="divide-y divide-gray-100">
                 @forelse ($items as $item)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 font-medium text-gray-900">{{ $item->display('nombre') }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $item->descripcion ? $item->display('descripcion') : '—' }}</td>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ $item->nombre }}</td>
+                        <td class="px-4 py-3 text-gray-600">{{ $item->descripcion ?: '—' }}</td>
                         <td class="px-4 py-3">
                             <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $item->activo ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600' }}">
                                 {{ $item->activo ? 'Activo' : 'Inactivo' }}
@@ -59,13 +59,13 @@
                                 <div>
                                     <x-input-label value="Nombre" />
                                     <x-text-input name="nombre" type="text" class="mt-1 block w-full" required maxlength="150"
-                                        value="{{ $item->display('nombre') }}" />
+                                        value="{{ $item->nombre }}" />
                                 </div>
 
                                 <div>
                                     <x-input-label value="Descripción" />
                                     <x-text-input name="descripcion" type="text" class="mt-1 block w-full" maxlength="255"
-                                        value="{{ $item->descripcion ? $item->display('descripcion') : '' }}" />
+                                        value="{{ $item->descripcion }}" />
                                 </div>
 
                                 <label class="flex items-center gap-2 text-sm text-gray-600">

@@ -14,8 +14,6 @@ class Especialidad extends Model
 
     protected $table = 'especialidades';
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];

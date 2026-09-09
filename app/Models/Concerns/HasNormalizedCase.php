@@ -5,34 +5,66 @@ namespace App\Models\Concerns;
 use Illuminate\Support\Str;
 
 /**
- * Stores text in lowercase (the canonical form kept in the database) while
- * letting views render it in a human-friendly case. A model using this trait
- * must define a $normalizedCase array of attribute names to lowercase on
- * save.
+ * Stores free-text fields in lowercase (the canonical form kept in the
+ * database) and transparently title-cases them back when read, so views
+ * never need to remember to format anything. Applies to every string
+ * attribute on the model except the ones in EXCLUDED_KEYS/EXCLUDED_SUFFIXES
+ * — ids, timestamps, emails, passwords, tokens, urls/links, and any
+ * status-like flag, since those must keep their exact stored value.
  */
 trait HasNormalizedCase
 {
+    /**
+     * Attribute names never normalized, regardless of the model.
+     */
+    private static array $normalizedCaseExcludedKeys = [
+        'password',
+        'remember_token',
+        'email',
+        'avatar_path',
+    ];
+
+    /**
+     * Substrings that exclude an attribute by name (case-insensitive).
+     */
+    private static array $normalizedCaseExcludedSubstrings = [
+        '_id', 'id_', 'clave', 'token', 'url', 'link', 'estatus', 'activo', 'password',
+    ];
+
     protected static function bootHasNormalizedCase(): void
     {
         static::saving(function ($model) {
-            foreach ($model->normalizedCaseFields() as $field) {
-                if (is_string($model->{$field})) {
-                    $model->{$field} = mb_strtolower(trim($model->{$field}));
+            foreach ($model->getAttributes() as $key => $value) {
+                if (is_string($value) && static::isNormalizedCaseField($key)) {
+                    $model->attributes[$key] = mb_strtolower(trim($value), 'UTF-8');
                 }
             }
         });
     }
 
-    protected function normalizedCaseFields(): array
+    private static function isNormalizedCaseField(string $key): bool
     {
-        return $this->normalizedCase ?? [];
+        if (in_array($key, self::$normalizedCaseExcludedKeys, true)) {
+            return false;
+        }
+
+        foreach (self::$normalizedCaseExcludedSubstrings as $needle) {
+            if (str_contains($key, $needle)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    /**
-     * Title-cased version of a normalized field, for display only.
-     */
-    public function display(string $field): string
+    public function getAttribute($key)
     {
-        return Str::title((string) $this->{$field});
+        $value = parent::getAttribute($key);
+
+        if ($key !== $this->getKeyName() && is_string($value) && static::isNormalizedCaseField($key)) {
+            return Str::title($value);
+        }
+
+        return $value;
     }
 }

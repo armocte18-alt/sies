@@ -12,8 +12,6 @@ class Puesto extends Model
 {
     use HasFactory, HasNormalizedCase;
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];

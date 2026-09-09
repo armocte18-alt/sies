@@ -14,8 +14,6 @@ class NivelEducativo extends Model
 
     protected $table = 'niveles_educativos';
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];

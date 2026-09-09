@@ -14,8 +14,6 @@ class TipoNombramiento extends Model
 
     protected $table = 'tipos_nombramiento';
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];

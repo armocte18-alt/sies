@@ -14,8 +14,6 @@ class TipoControlAsistencia extends Model
 
     protected $table = 'tipos_control_asistencia';
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];

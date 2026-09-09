@@ -61,9 +61,9 @@ class CatalogosRhTest extends TestCase
 
         $puesto = Puesto::where('nombre', 'administrador de proyectos')->firstOrFail();
 
-        $this->assertSame('administrador de proyectos', $puesto->nombre);
-        $this->assertSame('área de telecomunicaciones', $puesto->descripcion);
-        $this->assertSame('Administrador De Proyectos', $puesto->display('nombre'));
+        $this->assertSame('administrador de proyectos', $puesto->getRawOriginal('nombre'));
+        $this->assertSame('área de telecomunicaciones', $puesto->getRawOriginal('descripcion'));
+        $this->assertSame('Administrador De Proyectos', $puesto->nombre);
     }
 
     public function test_duplicate_names_are_rejected_case_insensitively(): void
@@ -95,8 +95,8 @@ class CatalogosRhTest extends TestCase
         ])->assertRedirect();
 
         $nivel = NivelSalarial::where('consecutivo', 1)->firstOrFail();
-        $this->assertSame('15 a1', $nivel->nivel_salarial);
-        $this->assertSame('15 A1', $nivel->display('nivel_salarial'));
+        $this->assertSame('15 a1', $nivel->getRawOriginal('nivel_salarial'));
+        $this->assertSame('15 A1', $nivel->nivel_salarial);
         $this->assertSame('10000.00', (string) $nivel->sueldo_base);
 
         $this->actingAs($user)->put(route('rh.catalogos.niveles-salariales.update', $nivel), [

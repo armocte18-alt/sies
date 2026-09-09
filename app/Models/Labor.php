@@ -14,8 +14,6 @@ class Labor extends Model
 
     protected $table = 'labores';
 
-    protected $normalizedCase = ['nombre', 'descripcion'];
-
     protected function casts(): array
     {
         return ['activo' => 'boolean'];
