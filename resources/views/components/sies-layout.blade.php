@@ -13,15 +13,35 @@
     <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=montserrat:400,500,600,700,800&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased text-gray-900">
+@php
+    // Some flows (Breeze's profile/password controllers) flash a machine
+    // sentinel through 'status' instead of a human sentence, meant only for
+    // the inline "Saved." indicator next to their own form. Translate the
+    // known sentinels for the toast; anything else is already a message.
+    $statusSentinels = [
+        'profile-updated' => 'Perfil actualizado correctamente.',
+        'password-updated' => 'Contraseña actualizada correctamente.',
+        'verification-link-sent' => 'Enlace de verificación enviado a tu correo.',
+    ];
+    $flashStatus = session('status') ? ($statusSentinels[session('status')] ?? session('status')) : null;
+@endphp
+<body
+    class="font-sans antialiased text-gray-900"
+    @if ($flashStatus) data-flash-status="{{ $flashStatus }}" @endif
+    @if (session('error')) data-flash-error="{{ session('error') }}" @endif
+    @if (session('warning')) data-flash-warning="{{ session('warning') }}" @endif
+>
     <a href="#contenido-principal"
         class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:shadow-lg">
         Saltar al contenido principal
     </a>
+
+    <x-loading-overlay />
+    <x-toast-container />
 
     <div x-data="{ sidebarOpen: false }" x-on:keydown.escape.window="sidebarOpen = false" class="min-h-screen bg-gray-100 lg:flex">
 
@@ -118,19 +138,27 @@
                     Sistema de Información, Estadística y Servicios
                 </div>
 
-                <div class="relative ms-auto" x-data="{ open: false }" x-on:keydown.escape="open = false">
-                    <button type="button" x-on:click="open = !open" :aria-expanded="open.toString()"
+                <div
+                    class="relative ms-auto"
+                    x-data="{ open: false }"
+                    x-on:keydown.escape.window="open = false"
+                    x-on:click.outside="open = false"
+                >
+                    <button type="button" x-on:click.stop="open = !open" :aria-expanded="open.toString()"
                         class="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-green">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-green text-xs font-bold text-white">
-                            {{ Illuminate\Support\Str::of(auth()->user()->name)->explode(' ')->map(fn ($p) => mb_substr($p, 0, 1))->take(2)->join('') }}
-                        </span>
+                        <img
+                            src="{{ auth()->user()->avatar_url }}"
+                            alt=""
+                            class="h-8 w-8 shrink-0 rounded-full object-cover"
+                            aria-hidden="true"
+                        >
                         <span class="hidden sm:inline">{{ auth()->user()->name }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>
 
-                    <div x-show="open" x-transition x-cloak x-on:click.outside="open = false"
+                    <div x-show="open" x-transition x-cloak
                         class="absolute right-0 z-50 mt-2 w-48 rounded-md border border-gray-100 bg-white py-1 shadow-lg"
                         role="menu">
                         <a href="{{ route('profile.edit') }}" role="menuitem"
@@ -153,13 +181,6 @@
             @endisset
 
             <main id="contenido-principal" class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-                @if (session('status'))
-                    <div role="status"
-                        class="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
                 {{ $slot }}
             </main>
 

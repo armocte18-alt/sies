@@ -1,0 +1,38 @@
+{
+    "Profile Information": "Información del perfil",
+    "Update your account's profile information and email address.": "Actualiza la información de tu perfil y tu correo electrónico.",
+    "Name": "Nombre",
+    "Email": "Correo electrónico",
+    "Your email address is unverified.": "Tu correo electrónico no está verificado.",
+    "Click here to re-send the verification email.": "Haz clic aquí para reenviar el correo de verificación.",
+    "A new verification link has been sent to your email address.": "Se ha enviado un nuevo enlace de verificación a tu correo electrónico.",
+    "A new verification link has been sent to the email address you provided during registration.": "Se ha enviado un nuevo enlace de verificación al correo electrónico que proporcionaste durante el registro.",
+    "Save": "Guardar",
+    "Saved.": "Guardado.",
+
+    "Update Password": "Actualizar contraseña",
+    "Ensure your account is using a long, random password to stay secure.": "Usa una contraseña larga y aleatoria para mantener segura tu cuenta.",
+    "Current Password": "Contraseña actual",
+    "New Password": "Nueva contraseña",
+    "Confirm Password": "Confirmar contraseña",
+
+    "Delete Account": "Eliminar cuenta",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Al eliminar tu cuenta, todos sus recursos y datos se eliminarán de forma permanente. Antes de continuar, descarga cualquier dato o información que desees conservar.",
+    "Are you sure you want to delete your account?": "¿Estás seguro de que deseas eliminar tu cuenta?",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Al eliminar tu cuenta, todos sus recursos y datos se eliminarán de forma permanente. Ingresa tu contraseña para confirmar que deseas eliminarla.",
+    "Password": "Contraseña",
+    "Cancel": "Cancelar",
+
+    "Log Out": "Cerrar sesión",
+    "Register": "Registrarse",
+    "Already registered?": "¿Ya tienes una cuenta?",
+
+    "Reset Password": "Restablecer contraseña",
+    "Email Password Reset Link": "Enviar enlace de restablecimiento",
+    "Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.": "¿Olvidaste tu contraseña? No hay problema. Indícanos tu correo electrónico y te enviaremos un enlace para restablecerla.",
+
+    "This is a secure area of the application. Please confirm your password before continuing.": "Esta es un área segura de la aplicación. Confirma tu contraseña antes de continuar.",
+    "Confirm": "Confirmar",
+
+    "Resend Verification Email": "Reenviar correo de verificación"
+}

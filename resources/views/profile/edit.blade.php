@@ -8,6 +8,12 @@
     <div class="mx-auto max-w-3xl space-y-6">
         <div class="rounded-lg bg-white p-4 shadow sm:p-8">
             <div class="max-w-xl">
+                @include('profile.partials.update-avatar-form')
+            </div>
+        </div>
+
+        <div class="rounded-lg bg-white p-4 shadow sm:p-8">
+            <div class="max-w-xl">
                 @include('profile.partials.update-profile-information-form')
             </div>
         </div>

@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -95,5 +97,64 @@ class ProfileTest extends TestCase
             ->assertRedirect('/profile');
 
         $this->assertNotNull($user->fresh());
+    }
+
+    public function test_default_avatar_url_is_used_when_no_photo_uploaded(): void
+    {
+        $user = User::factory()->create();
+
+        $this->assertStringContainsString('avatar_h.png', $user->avatar_url);
+    }
+
+    public function test_user_can_upload_a_profile_photo(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->post('/profile/avatar', [
+                'avatar' => UploadedFile::fake()->image('photo.jpg'),
+            ]);
+
+        $response->assertRedirect('/profile');
+
+        $user->refresh();
+        $this->assertNotNull($user->avatar_path);
+        Storage::disk('public')->assertExists($user->avatar_path);
+        $this->assertStringContainsString($user->avatar_path, $user->avatar_url);
+    }
+
+    public function test_user_can_remove_their_profile_photo(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create(['avatar_path' => 'avatars/existing.jpg']);
+        Storage::disk('public')->put('avatars/existing.jpg', 'fake-content');
+
+        $response = $this
+            ->actingAs($user)
+            ->delete('/profile/avatar');
+
+        $response->assertRedirect('/profile');
+
+        $user->refresh();
+        $this->assertNull($user->avatar_path);
+        Storage::disk('public')->assertMissing('avatars/existing.jpg');
+    }
+
+    public function test_avatar_upload_rejects_non_image_files(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from('/profile')
+            ->post('/profile/avatar', [
+                'avatar' => UploadedFile::fake()->create('document.pdf', 100),
+            ]);
+
+        $response->assertSessionHasErrors('avatar');
+        $this->assertNull($user->refresh()->avatar_path);
     }
 }

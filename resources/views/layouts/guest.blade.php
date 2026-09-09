@@ -12,11 +12,17 @@
         <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=montserrat:400,500,600,700,800&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body
+        class="font-sans text-gray-900 antialiased"
+        @if (session('status')) data-flash-status="{{ session('status') }}" @endif
+    >
+        <x-loading-overlay />
+        <x-toast-container />
+
         <div class="min-h-screen flex flex-col items-center justify-center gap-8 bg-gray-50 px-4 py-10">
             <img
                 src="{{ asset('images/FinabienLogo.png') }}"
