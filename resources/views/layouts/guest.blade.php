@@ -23,14 +23,27 @@
         <x-loading-overlay />
         <x-toast-container />
 
-        <div class="min-h-screen flex flex-col items-center justify-center gap-8 bg-gray-50 px-4 py-10">
+        <div class="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden bg-gradient-to-br from-brand-green-950 via-brand-green-800 to-brand-green px-4 py-10">
+            <img
+                src="{{ asset('images/fondo_finabien_circular.jpg') }}"
+                alt=""
+                aria-hidden="true"
+                class="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full opacity-5 blur-sm sm:h-[40rem] sm:w-[40rem]"
+            >
+            <img
+                src="{{ asset('images/fondo_finabien_circular.jpg') }}"
+                alt=""
+                aria-hidden="true"
+                class="pointer-events-none absolute -bottom-40 -left-40 h-[28rem] w-[28rem] rounded-full opacity-5 blur-sm"
+            >
+
             <img
                 src="{{ asset('images/FinabienLogo.png') }}"
                 alt="Financiera para el Bienestar"
-                class="h-28 w-auto sm:h-32"
+                class="relative h-28 w-auto sm:h-32"
             >
 
-            <div class="w-full max-w-md overflow-hidden rounded-xl bg-brand-green shadow-xl">
+            <div class="relative w-full max-w-md overflow-hidden rounded-xl border border-white/10 bg-brand-green/70 shadow-xl backdrop-blur-md">
                 {{ $slot }}
             </div>
         </div>

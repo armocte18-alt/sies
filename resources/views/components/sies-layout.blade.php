@@ -134,9 +134,15 @@
                     </svg>
                 </button>
 
-                <div class="hidden text-sm font-medium text-gray-500 lg:block">
-                    {{ $title ?? 'Panel principal' }}
-                </div>
+                <nav aria-label="Ruta de navegación" class="hidden items-center gap-1.5 text-sm font-medium text-gray-500 lg:flex">
+                    <a href="{{ route('dashboard') }}" class="hover:text-brand-green">Inicio</a>
+                    @if ($title && $title !== 'Dashboard')
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                        <span class="text-gray-700" aria-current="page">{{ $title }}</span>
+                    @endif
+                </nav>
 
                 <div class="ms-auto flex items-center gap-1">
                     <button type="button" id="theme-toggle"

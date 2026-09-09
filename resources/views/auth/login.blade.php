@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="px-6 py-8 sm:px-10">
-        <h1 class="mb-6 text-center text-xl font-bold text-white">Login | SIES</h1>
+        <h1 class="mb-6 text-center text-xl font-bold text-white">Iniciar sesión | SIES</h1>
 
         <x-auth-session-status class="mb-4 rounded-md bg-white/90 px-3 py-2 text-sm" :status="session('status')" />
 
