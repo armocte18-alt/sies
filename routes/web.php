@@ -32,6 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('sucursales')->name('sucursales.')->group(function () {
         Route::get('/', [SucursalController::class, 'index'])->name('index');
+        Route::get('/exportar/excel', [SucursalController::class, 'exportarExcel'])->name('exportar.excel');
+        Route::get('/exportar/pdf', [SucursalController::class, 'exportarPdf'])->name('exportar.pdf');
         Route::get('/nueva', [SucursalController::class, 'create'])->name('create');
         Route::post('/', [SucursalController::class, 'store'])->name('store');
         Route::get('/{sucursal}', [SucursalController::class, 'show'])->name('show');

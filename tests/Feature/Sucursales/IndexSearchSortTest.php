@@ -48,6 +48,45 @@ class IndexSearchSortTest extends TestCase
         $response->assertDontSee('SIES | GECDMX');
     }
 
+    public function test_estatus_filter_shows_only_matching_sucursales(): void
+    {
+        Sucursal::factory()->create(['nombre_oficial' => 'Activa Uno', 'estatus_operativo' => 'activa']);
+        Sucursal::factory()->create(['nombre_oficial' => 'Suspendida Uno', 'estatus_operativo' => 'suspendida']);
+
+        $user = User::factory()->create();
+        $user->assignRole('supervision');
+
+        $response = $this->actingAs($user)->get(route('sucursales.index', ['estatus' => 'suspendida']));
+
+        $response->assertOk()->assertSee('Suspendida Uno')->assertDontSee('Activa Uno');
+    }
+
+    public function test_per_page_selector_limits_the_number_of_results(): void
+    {
+        Sucursal::factory()->count(20)->create();
+
+        $user = User::factory()->create();
+        $user->assignRole('supervision');
+
+        $response = $this->actingAs($user)->get(route('sucursales.index', ['per_page' => 15]));
+        $response->assertOk()->assertViewHas('sucursales', fn ($p) => $p->perPage() === 15);
+
+        $response = $this->actingAs($user)->get(route('sucursales.index', ['per_page' => 25]));
+        $response->assertOk()->assertViewHas('sucursales', fn ($p) => $p->perPage() === 25);
+    }
+
+    public function test_per_page_rejects_values_outside_the_allowed_list(): void
+    {
+        Sucursal::factory()->count(3)->create();
+
+        $user = User::factory()->create();
+        $user->assignRole('supervision');
+
+        $response = $this->actingAs($user)->get(route('sucursales.index', ['per_page' => 9999]));
+
+        $response->assertOk()->assertViewHas('sucursales', fn ($p) => $p->perPage() === 15);
+    }
+
     public function test_can_sort_by_clave_descending(): void
     {
         Sucursal::factory()->create(['nombre_oficial' => 'A', 'clave_financiera' => '09010']);

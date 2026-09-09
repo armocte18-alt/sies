@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasNormalizedCase;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class SucursalUbicacion extends Model
 {
-    use HasFactory;
+    use HasFactory, HasNormalizedCase;
 
     protected $table = 'sucursal_ubicaciones';
 
@@ -34,5 +35,34 @@ class SucursalUbicacion extends Model
     public function alcaldia(): BelongsTo
     {
         return $this->belongsTo(Alcaldia::class);
+    }
+
+    public function domicilioCompleto(): string
+    {
+        $calle = trim("{$this->calle} {$this->num_ext}");
+
+        return collect([
+            $this->num_int ? "{$calle} Int. {$this->num_int}" : $calle,
+            $this->colonia ? "Col. {$this->colonia}" : null,
+            $this->codigo_postal ? "C.P. {$this->codigo_postal}" : null,
+        ])->filter()->implode(', ');
+    }
+
+    public function entreCalles(): ?string
+    {
+        if ($this->entre_calle_1 && $this->entre_calle_2) {
+            return "Entre {$this->entre_calle_1} y {$this->entre_calle_2}";
+        }
+
+        return $this->entre_calle_1 ? "Entre {$this->entre_calle_1}" : null;
+    }
+
+    public function urlMapa(): ?string
+    {
+        if (! $this->latitud || ! $this->longitud) {
+            return null;
+        }
+
+        return "https://www.google.com/maps?q={$this->latitud},{$this->longitud}";
     }
 }

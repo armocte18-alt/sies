@@ -36,4 +36,28 @@ class SucursalOperacion extends Model
     {
         return $this->belongsTo(Sucursal::class);
     }
+
+    public function resumenHorario(): ?string
+    {
+        return $this->resumen($this->dias_laborables, $this->hora_apertura_publico, $this->hora_cierre_publico);
+    }
+
+    public function resumenGuardia(): ?string
+    {
+        // apertura_guardia/cierre_guardia suelen traer 00:00 por defecto en
+        // filas donde nunca se configuró guardia; sin días no hay guardia
+        // real que mostrar, aunque las horas no vengan nulas.
+        if (! $this->dias_guardia) {
+            return null;
+        }
+
+        return $this->resumen($this->dias_guardia, $this->apertura_guardia, $this->cierre_guardia);
+    }
+
+    private function resumen(?string $dias, $desde, $hasta): ?string
+    {
+        $horas = $desde && $hasta ? "{$desde->format('H:i')} - {$hasta->format('H:i')} hrs" : null;
+
+        return collect([$dias, $horas])->filter()->implode(' · ') ?: null;
+    }
 }

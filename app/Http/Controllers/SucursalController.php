@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SucursalesExport;
 use App\Http\Requests\Sucursales\StoreSucursalRequest;
 use App\Http\Requests\Sucursales\UpdateIdentificacionRequest;
 use App\Models\Sucursal;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SucursalController extends Controller
 {
@@ -19,27 +24,14 @@ class SucursalController extends Controller
         'estatus' => 'sucursales.estatus_operativo',
     ];
 
+    private const OPCIONES_POR_PAGINA = [15, 25, 50, 100];
+
     public function index(Request $request): View
     {
         $this->authorize('viewAny', Sucursal::class);
 
-        $columna = self::COLUMNAS_ORDENABLES[$request->query('sort')] ?? 'sucursales.clave_financiera';
-        $direccion = $request->query('direction') === 'desc' ? 'desc' : 'asc';
-
-        $sucursales = Sucursal::query()
-            ->select('sucursales.*')
-            ->leftJoin('sucursal_ubicaciones', 'sucursal_ubicaciones.sucursal_id', '=', 'sucursales.id')
-            ->leftJoin('alcaldias', 'alcaldias.id', '=', 'sucursal_ubicaciones.alcaldia_id')
-            ->with(['ubicacion.alcaldia', 'finanzas', 'titular'])
-            ->when($request->query('buscar'), function ($query, $buscar) {
-                $query->where(function ($q) use ($buscar) {
-                    $q->where('sucursales.nombre_oficial', 'like', "%{$buscar}%")
-                        ->orWhere('sucursales.clave_financiera', 'like', "%{$buscar}%");
-                });
-            })
-            ->when($request->query('alcaldia'), fn ($query, $alcaldiaId) => $query->where('alcaldias.id', $alcaldiaId))
-            ->orderBy($columna, $direccion)
-            ->paginate(15)
+        $sucursales = $this->sucursalesFiltradas($request)
+            ->paginate($this->porPagina($request))
             ->withQueryString();
 
         if ($request->ajax()) {
@@ -47,6 +39,57 @@ class SucursalController extends Controller
         }
 
         return view('sucursales.index', compact('sucursales'));
+    }
+
+    public function exportarExcel(Request $request): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $this->authorize('viewAny', Sucursal::class);
+
+        return Excel::download(new SucursalesExport($this->sucursalesFiltradas($request)), 'sucursales.xlsx');
+    }
+
+    public function exportarPdf(Request $request): Response
+    {
+        $this->authorize('viewAny', Sucursal::class);
+
+        $sucursales = $this->sucursalesFiltradas($request)->get();
+
+        $pdf = Pdf::loadView('sucursales.pdfs.listado', compact('sucursales'))->setPaper('a4', 'landscape');
+
+        return $pdf->download('sucursales.pdf');
+    }
+
+    /**
+     * Query base compartida entre el listado paginado y ambas exportaciones,
+     * para que "exportar" siempre refleje exactamente lo que está filtrado
+     * en pantalla (búsqueda, alcaldía y estatus).
+     */
+    private function sucursalesFiltradas(Request $request): Builder
+    {
+        $columna = self::COLUMNAS_ORDENABLES[$request->query('sort')] ?? 'sucursales.clave_financiera';
+        $direccion = $request->query('direction') === 'desc' ? 'desc' : 'asc';
+
+        return Sucursal::query()
+            ->select('sucursales.*')
+            ->leftJoin('sucursal_ubicaciones', 'sucursal_ubicaciones.sucursal_id', '=', 'sucursales.id')
+            ->leftJoin('alcaldias', 'alcaldias.id', '=', 'sucursal_ubicaciones.alcaldia_id')
+            ->with(['ubicacion.alcaldia', 'operacion', 'finanzas', 'titular'])
+            ->when($request->query('buscar'), function ($query, $buscar) {
+                $query->where(function ($q) use ($buscar) {
+                    $q->where('sucursales.nombre_oficial', 'like', "%{$buscar}%")
+                        ->orWhere('sucursales.clave_financiera', 'like', "%{$buscar}%");
+                });
+            })
+            ->when($request->query('alcaldia'), fn ($query, $alcaldiaId) => $query->where('alcaldias.id', $alcaldiaId))
+            ->when($request->query('estatus'), fn ($query, $estatus) => $query->where('sucursales.estatus_operativo', $estatus))
+            ->orderBy($columna, $direccion);
+    }
+
+    private function porPagina(Request $request): int
+    {
+        $valor = (int) $request->query('per_page', 15);
+
+        return in_array($valor, self::OPCIONES_POR_PAGINA, true) ? $valor : 15;
     }
 
     public function create(): View
