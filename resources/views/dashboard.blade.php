@@ -52,7 +52,7 @@
     </div>
 
     <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <section class="rounded-lg bg-white p-4 shadow-sm lg:col-span-2" aria-labelledby="mapa-heading">
+        <section class="flex flex-col rounded-lg bg-white p-4 shadow-sm lg:col-span-2" aria-labelledby="mapa-heading">
             <h2 id="mapa-heading" class="mb-3 flex items-center gap-2 text-base font-semibold text-gray-800">
                 <x-nav-icon name="building" class="h-5 w-5 text-brand-green" />
                 Ubicación de Sucursales
@@ -71,7 +71,7 @@
 
             <div id="sucursales-map" role="img" aria-label="Mapa con la ubicación de las sucursales activas"
                 data-markers="{{ $markers->toJson() }}"
-                class="h-80 w-full rounded-md bg-gray-100"></div>
+                class="h-80 min-h-0 w-full flex-1 rounded-md bg-gray-100"></div>
 
             @if ($markers->isEmpty())
                 <p class="mt-2 text-sm text-gray-500">Aún no hay sucursales con coordenadas capturadas.</p>
@@ -92,7 +92,10 @@
                     @foreach ($sucursalesPorAlcaldia as $alcaldia)
                         <li>
                             <div class="flex items-center justify-between text-sm">
-                                <span class="font-medium uppercase text-gray-700">{{ $alcaldia->nombre }}</span>
+                                <a href="{{ route('sucursales.index', ['alcaldia' => $alcaldia->id]) }}"
+                                    class="font-medium uppercase text-gray-700 hover:text-brand-green hover:underline">
+                                    {{ $alcaldia->nombre }}
+                                </a>
                                 <span class="text-gray-500">{{ $alcaldia->sucursales_count }}</span>
                             </div>
                             <div class="mt-1 h-2 w-full rounded-full bg-gray-100" role="presentation">

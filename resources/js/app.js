@@ -50,7 +50,9 @@ Alpine.data('busquedaEnVivo', () => ({
             return;
         }
 
-        const url = new URL(this.form.action);
+        // Parte de la URL actual (no de this.form.action) para no perder otros
+        // filtros ya aplicados en la página, como ?alcaldia= o ?sucursal=.
+        const url = new URL(window.location.href);
         if (this.valor) {
             url.searchParams.set('buscar', this.valor);
         } else {

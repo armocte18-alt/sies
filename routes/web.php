@@ -109,10 +109,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('calendario')->name('calendario.')->middleware('can:calendario.ver')->group(function () {
         Route::get('/', [CalendarioController::class, 'index'])->name('index');
+        Route::get('/eventos', [CalendarioController::class, 'eventosJson'])->name('eventos');
 
         Route::middleware('can:calendario.gestionar')->group(function () {
-            Route::post('/', [CalendarioController::class, 'store'])->name('store');
-            Route::delete('/{evento}', [CalendarioController::class, 'destroy'])->name('destroy');
+            Route::post('/eventos', [CalendarioController::class, 'store'])->name('eventos.store');
+            Route::put('/eventos/{evento}', [CalendarioController::class, 'update'])->name('eventos.update');
+            Route::delete('/eventos/{evento}/serie', [CalendarioController::class, 'destroySerie'])->name('eventos.destroy-serie');
+            Route::delete('/eventos/{evento}', [CalendarioController::class, 'destroy'])->name('eventos.destroy');
+
+            Route::get('/eventos-rapidos', [CalendarioController::class, 'rapidosIndex'])->name('rapidos.index');
+            Route::post('/eventos-rapidos', [CalendarioController::class, 'rapidosStore'])->name('rapidos.store');
+            Route::put('/eventos-rapidos/{rapido}', [CalendarioController::class, 'rapidosUpdate'])->name('rapidos.update');
+            Route::delete('/eventos-rapidos/{rapido}', [CalendarioController::class, 'rapidosDestroy'])->name('rapidos.destroy');
         });
     });
 

@@ -26,6 +26,16 @@
         </div>
     </form>
 
+    @if (request('alcaldia'))
+        @php $alcaldiaFiltro = \App\Models\Alcaldia::find(request('alcaldia')); @endphp
+        @if ($alcaldiaFiltro)
+            <p class="mt-3 text-sm text-gray-600">
+                Filtrando por alcaldía: <span class="font-semibold">{{ $alcaldiaFiltro->nombre }}</span>
+                &middot; <a href="{{ route('sucursales.index') }}" class="text-brand-green hover:underline">Quitar filtro</a>
+            </p>
+        @endif
+    @endif
+
     <div id="resultados-sucursales" class="mt-4">
         @include('sucursales.partials.tabla')
     </div>

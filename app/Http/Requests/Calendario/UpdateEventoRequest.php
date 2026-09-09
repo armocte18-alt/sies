@@ -4,7 +4,7 @@ namespace App\Http\Requests\Calendario;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEventoRequest extends FormRequest
+class UpdateEventoRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,7 +16,7 @@ class StoreEventoRequest extends FormRequest
         return [
             'nombre' => ['required', 'string', 'max:255'],
             'fecha_inicio' => ['required', 'date'],
-            'fecha_fin' => ['nullable', 'date', 'after_or_equal:fecha_inicio', 'required_if:es_recurrente,true'],
+            'fecha_fin' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'hora_inicio' => ['nullable', 'date_format:H:i'],
             'hora_fin' => ['nullable', 'date_format:H:i', 'after:hora_inicio'],
             'ubicacion' => ['nullable', 'string', 'max:255'],
@@ -25,9 +25,6 @@ class StoreEventoRequest extends FormRequest
             'invitados' => ['nullable', 'array'],
             'invitados.*' => ['string', 'max:100'],
             'notas' => ['nullable', 'string', 'max:2000'],
-            'es_recurrente' => ['nullable', 'boolean'],
-            'dias_semana' => ['required_if:es_recurrente,true', 'array'],
-            'dias_semana.*' => ['integer', 'between:0,6'],
         ];
     }
 
@@ -39,7 +36,6 @@ class StoreEventoRequest extends FormRequest
             'hora_inicio' => 'hora de inicio',
             'hora_fin' => 'hora de fin',
             'tipo_asociado' => 'evento convocado por',
-            'dias_semana' => 'días de repetición',
         ];
     }
 }

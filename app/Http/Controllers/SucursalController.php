@@ -37,6 +37,7 @@ class SucursalController extends Controller
                         ->orWhere('sucursales.clave_financiera', 'like', "%{$buscar}%");
                 });
             })
+            ->when($request->query('alcaldia'), fn ($query, $alcaldiaId) => $query->where('alcaldias.id', $alcaldiaId))
             ->orderBy($columna, $direccion)
             ->paginate(15)
             ->withQueryString();

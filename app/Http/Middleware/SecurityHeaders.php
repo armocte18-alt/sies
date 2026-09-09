@@ -22,7 +22,9 @@ class SecurityHeaders
             "default-src 'self'",
             "script-src 'self'",
             "style-src 'self' 'unsafe-inline' https://fonts.bunny.net",
-            "font-src 'self' https://fonts.bunny.net",
+            // data: es necesario para el icon-font embebido que FullCalendar
+            // inyecta en tiempo de ejecución (botones prev/next del calendario).
+            "font-src 'self' data: https://fonts.bunny.net",
             "img-src 'self' data: https://*.tile.openstreetmap.org",
             "connect-src 'self'",
             "frame-ancestors 'none'",
