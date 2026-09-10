@@ -65,10 +65,6 @@ class SucursalPermissionsTest extends TestCase
         $this->actingAs($tecnica)
             ->patch(route('sucursales.finanzas.update', $sucursal), [
                 'limite_existencia_caja' => 1000,
-                'volumen_total' => 10,
-                'cantidad_situada' => 1000,
-                'ingreso_estimado' => 1000,
-                'gasto_total' => 500,
             ])
             ->assertForbidden();
     }
@@ -97,16 +93,12 @@ class SucursalPermissionsTest extends TestCase
         $this->actingAs($admin)
             ->patch(route('sucursales.finanzas.update', $sucursal), [
                 'limite_existencia_caja' => 2000,
-                'volumen_total' => 20,
-                'cantidad_situada' => 2000,
-                'ingreso_estimado' => 2000,
-                'gasto_total' => 500,
             ])
             ->assertRedirect();
 
         $this->assertDatabaseHas('sucursal_finanzas', [
             'sucursal_id' => $sucursal->id,
-            'gasto_total' => 500,
+            'limite_existencia_caja' => 2000,
         ]);
     }
 }

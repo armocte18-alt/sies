@@ -11,42 +11,12 @@
             @csrf
             @method('PATCH')
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div>
-                    <x-input-label for="limite_existencia_caja" value="Límite de existencia en caja" />
-                    <x-text-input id="limite_existencia_caja" name="limite_existencia_caja" type="number" step="0.01" min="0" class="mt-1 block w-full"
-                        :value="old('limite_existencia_caja', $finanzas?->limite_existencia_caja ?? 0)" required />
-                    <x-input-error :messages="$errors->get('limite_existencia_caja')" class="mt-2" />
-                </div>
-                <div>
-                    <x-input-label for="volumen_total" value="Volumen total" />
-                    <x-text-input id="volumen_total" name="volumen_total" type="number" min="0" class="mt-1 block w-full"
-                        :value="old('volumen_total', $finanzas?->volumen_total ?? 0)" required />
-                </div>
-                <div>
-                    <x-input-label for="cantidad_situada" value="Cantidad situada" />
-                    <x-text-input id="cantidad_situada" name="cantidad_situada" type="number" step="0.01" min="0" class="mt-1 block w-full"
-                        :value="old('cantidad_situada', $finanzas?->cantidad_situada ?? 0)" required />
-                </div>
+            <div class="max-w-xs">
+                <x-input-label for="limite_existencia_caja" value="Límite de existencia en caja" />
+                <x-text-input id="limite_existencia_caja" name="limite_existencia_caja" type="number" step="0.01" min="0" class="mt-1 block w-full"
+                    :value="old('limite_existencia_caja', $finanzas?->limite_existencia_caja ?? 0)" required />
+                <x-input-error :messages="$errors->get('limite_existencia_caja')" class="mt-2" />
             </div>
-
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                    <x-input-label for="ingreso_estimado" value="Ingreso estimado" />
-                    <x-text-input id="ingreso_estimado" name="ingreso_estimado" type="number" step="0.01" min="0" class="mt-1 block w-full"
-                        :value="old('ingreso_estimado', $finanzas?->ingreso_estimado ?? 0)" required />
-                </div>
-                <div>
-                    <x-input-label for="gasto_total" value="Gasto total" />
-                    <x-text-input id="gasto_total" name="gasto_total" type="number" step="0.01" min="0" class="mt-1 block w-full"
-                        :value="old('gasto_total', $finanzas?->gasto_total ?? 0)" required />
-                    <x-input-error :messages="$errors->get('gasto_total')" class="mt-2" />
-                </div>
-            </div>
-
-            <p class="text-xs text-gray-500">
-                El balance y el estatus financiero se calculan automáticamente (ingreso estimado − gasto total).
-            </p>
 
             <button type="submit"
                 class="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green">
@@ -57,8 +27,6 @@
         @if ($finanzas)
             <dl class="grid grid-cols-1 gap-x-4 gap-y-3 text-sm sm:grid-cols-3">
                 <div><dt class="text-gray-500">Límite de caja</dt><dd class="font-medium text-gray-900">${{ number_format($finanzas->limite_existencia_caja, 2) }}</dd></div>
-                <div><dt class="text-gray-500">Volumen total</dt><dd class="font-medium text-gray-900">{{ number_format($finanzas->volumen_total) }}</dd></div>
-                <div><dt class="text-gray-500">Balance</dt><dd class="font-medium text-gray-900">${{ number_format($finanzas->balance, 2) }}</dd></div>
             </dl>
         @else
             <p class="text-sm text-gray-500">Aún no se ha capturado información financiera.</p>

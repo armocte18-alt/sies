@@ -34,8 +34,8 @@
         </x-dashboard.stat-card>
 
         <x-dashboard.stat-card
-            label="Balance Acumulado {{ now()->year }}"
-            :value="'$'.number_format($balanceAcumulado, 2)"
+            label="Límite de Caja Total"
+            :value="'$'.number_format($limiteExistenciaCajaTotal, 2)"
             color="bg-slate-800"
         >
             <x-nav-icon name="chart" class="h-8 w-8" />

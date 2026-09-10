@@ -84,10 +84,6 @@ class DemoSucursalSeeder extends Seeder
 
         $sucursal->finanzas()->updateOrCreate([], [
             'limite_existencia_caja' => 100000,
-            'volumen_total' => 18527,
-            'cantidad_situada' => 42567222.26,
-            'ingreso_estimado' => 280732.64,
-            'gasto_total' => 359950.28,
         ]);
     }
 }

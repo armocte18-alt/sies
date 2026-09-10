@@ -15,10 +15,10 @@ class DashboardController extends Controller
         $sucursalesActivas = Sucursal::where('estatus_operativo', 'activa')->count();
         $totalEmpleados = Empleado::where('activo', true)->count();
 
-        $balanceAcumulado = Sucursal::query()
+        $limiteExistenciaCajaTotal = Sucursal::query()
             ->join('sucursal_finanzas', 'sucursal_finanzas.sucursal_id', '=', 'sucursales.id')
-            ->selectRaw('COALESCE(SUM(ingreso_estimado - gasto_total), 0) as balance')
-            ->value('balance');
+            ->selectRaw('COALESCE(SUM(limite_existencia_caja), 0) as total')
+            ->value('total');
 
         $sucursalesPorAlcaldia = Alcaldia::query()
             ->withCount(['ubicaciones as sucursales_count'])
@@ -34,7 +34,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'sucursalesActivas' => $sucursalesActivas,
             'totalEmpleados' => $totalEmpleados,
-            'balanceAcumulado' => (float) $balanceAcumulado,
+            'limiteExistenciaCajaTotal' => (float) $limiteExistenciaCajaTotal,
             'sucursalesPorAlcaldia' => $sucursalesPorAlcaldia,
             'sucursales' => Sucursal::with('ubicacion')->get(),
             'eventosProximos' => $eventosProximos,

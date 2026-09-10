@@ -1,7 +1,3 @@
-@php
-    $finanzas = $sucursal->finanzas;
-@endphp
-
 <x-sies-layout :title="$sucursal->etiqueta">
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -9,30 +5,6 @@
             <h1 class="text-2xl font-bold text-gray-900">{{ $sucursal->etiqueta }}</h1>
         </div>
         <x-sucursales.estatus-badge :estatus="$sucursal->estatus_operativo" class="text-sm" />
-    </div>
-
-    <p class="mt-1 text-xs text-gray-400">
-        <i>Cifras sin telegramas (francos) ni programas sociales.</i>
-    </p>
-
-    {{-- Resumen financiero --}}
-    <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <x-sucursales.metric-card label="Volumen Total" :value="number_format($finanzas->volumen_total ?? 0)" icon="grid" color="text-sky-600" />
-        <x-sucursales.metric-card label="Cantidad Situada" :value="'$'.number_format($finanzas->cantidad_situada ?? 0, 2)" icon="chart" color="text-green-600" />
-        <x-sucursales.metric-card label="Ingreso Estimado" :value="'$'.number_format($finanzas->ingreso_estimado ?? 0, 2)" icon="card" color="text-amber-600" />
-        <x-sucursales.metric-card label="Gasto Total" :value="'$'.number_format($finanzas->gasto_total ?? 0, 2)" icon="wrench" color="text-red-600" />
-        <x-sucursales.metric-card label="Balance" :value="'$'.number_format($finanzas->balance ?? 0, 2)" icon="chart" color="text-slate-700" />
-        <div class="flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
-            <span class="text-sm font-medium text-gray-500">Estatus financiero</span>
-            @php $estatusFinanciero = $finanzas->estatus_financiero ?? 'superavitaria'; @endphp
-            <span @class([
-                'inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold uppercase text-white',
-                'bg-red-600' => $estatusFinanciero === 'deficitaria',
-                'bg-green-600' => $estatusFinanciero !== 'deficitaria',
-            ])>
-                {{ $estatusFinanciero === 'deficitaria' ? '↓ Deficitaria' : '↑ Superavitaria' }}
-            </span>
-        </div>
     </div>
 
     <div class="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -77,6 +49,7 @@
                 'inmueble' => 'Inmueble',
                 'equipamiento' => 'Equipamiento técnico',
                 'finanzas' => 'Finanzas',
+                'acervo' => 'Acervo Documental',
                 ...($sucursal->operacion?->reparto_activo ? ['reparto' => 'Reparto'] : []),
             ] as $key => $label)
                 <button type="button" role="tab" id="tab-{{ $key }}" aria-controls="panel-{{ $key }}"
@@ -103,6 +76,9 @@
         </div>
         <div role="tabpanel" id="panel-finanzas" aria-labelledby="tab-finanzas" x-show="tab === 'finanzas'" x-cloak class="pt-4">
             @include('sucursales.partials.finanzas')
+        </div>
+        <div role="tabpanel" id="panel-acervo" aria-labelledby="tab-acervo" x-show="tab === 'acervo'" x-cloak class="pt-4">
+            @include('sucursales.partials.acervo')
         </div>
         @if ($sucursal->operacion?->reparto_activo)
             <div role="tabpanel" id="panel-reparto" aria-labelledby="tab-reparto" x-show="tab === 'reparto'" x-cloak class="pt-4">
