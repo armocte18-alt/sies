@@ -99,6 +99,13 @@ class Sucursal extends Model
         return $this->hasMany(SucursalEquipamientoReparto::class);
     }
 
+    // --- Acervo documental ---
+
+    public function documentosAcervo(): HasMany
+    {
+        return $this->hasMany(DocumentoAcervo::class);
+    }
+
     /**
      * Domicilio, "entre calles" y referencia visual como líneas separadas,
      * listas para unir con <br> (PDF) o repartir en varias filas con

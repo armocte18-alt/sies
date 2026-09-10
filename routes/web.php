@@ -14,6 +14,7 @@ use App\Http\Controllers\DirectorioController;
 use App\Http\Controllers\PlaceholderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SucursalController;
+use App\Http\Controllers\Sucursales\DocumentoAcervoController;
 use App\Http\Controllers\Sucursales\EquipamientoController;
 use App\Http\Controllers\Sucursales\FinanzasController;
 use App\Http\Controllers\Sucursales\HorariosController;
@@ -56,6 +57,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{sucursal}/equipamiento-reparto', [RepartoController::class, 'storeEquipamiento'])->name('equipamiento-reparto.store');
         Route::put('/{sucursal}/equipamiento-reparto/{equipamientoReparto}', [RepartoController::class, 'updateEquipamiento'])->name('equipamiento-reparto.update');
         Route::delete('/{sucursal}/equipamiento-reparto/{equipamientoReparto}', [RepartoController::class, 'destroyEquipamiento'])->name('equipamiento-reparto.destroy');
+
+        Route::post('/{sucursal}/acervo', [DocumentoAcervoController::class, 'store'])->name('acervo.store');
+        Route::post('/acervo/tipos', [DocumentoAcervoController::class, 'storeTipo'])->name('acervo.tipos.store');
+        Route::get('/acervo/versiones/{version}/descargar', [DocumentoAcervoController::class, 'descargar'])->name('acervo.versiones.descargar');
+        Route::patch('/acervo/versiones/{version}/restaurar', [DocumentoAcervoController::class, 'restaurarVersion'])->name('acervo.versiones.restaurar');
+        Route::delete('/acervo/versiones/{version}', [DocumentoAcervoController::class, 'eliminarVersion'])->name('acervo.versiones.destroy');
     });
 
     Route::prefix('rh/catalogos')->name('rh.catalogos.')->middleware('can:catalogos-rh.gestionar')->group(function () {

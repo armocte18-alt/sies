@@ -61,4 +61,9 @@ class SucursalPolicy
     {
         return $user->can('sucursales.editar.reparto');
     }
+
+    public function updateAcervo(User $user, Sucursal $sucursal): bool
+    {
+        return $user->can('sucursales.editar.acervo');
+    }
 }

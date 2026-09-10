@@ -7,6 +7,7 @@ use App\Http\Requests\Sucursales\StoreSucursalRequest;
 use App\Http\Requests\Sucursales\UpdateIdentificacionRequest;
 use App\Models\Alcaldia;
 use App\Models\Sucursal;
+use App\Models\TipoDocumentoAcervo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -186,9 +187,13 @@ class SucursalController extends Controller
             'motocicletas' => fn ($q) => $q->orderBy('placa'),
             'motocicletas.cargasCombustible',
             'equipamientoReparto' => fn ($q) => $q->orderBy('tipo'),
+            'documentosAcervo.versionActual',
+            'documentosAcervo.versiones.subidoPor',
         ]);
 
-        return view('sucursales.show', compact('sucursal'));
+        $tiposAcervo = TipoDocumentoAcervo::where('activo', true)->orderBy('orden')->get();
+
+        return view('sucursales.show', compact('sucursal', 'tiposAcervo'));
     }
 
     public function updateIdentificacion(UpdateIdentificacionRequest $request, Sucursal $sucursal): RedirectResponse
