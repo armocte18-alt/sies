@@ -10,14 +10,14 @@
         .encabezado td { border: none; padding: 0; background: none; vertical-align: middle; }
         .logotipo img { height: 34px; }
         .letterhead { text-align: right; font-size: 8px; font-weight: bold; color: #111; line-height: 1.5; }
-        .titulo { text-align: center; font-size: 15px; font-weight: bold; color: #135c46; margin: 14px 0 4px 0; text-transform: uppercase; }
+        .titulo { text-align: center; font-size: 15px; font-weight: bold; color: #1e5b4f; margin: 14px 0 4px 0; text-transform: uppercase; }
         .filtros { text-align: center; font-size: 9px; font-style: italic; color: #4B5563; margin-bottom: 12px; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #135c46; color: #fff; padding: 5px 6px; font-size: 8.5px; text-align: left; }
+        th { background: #1e5b4f; color: #fff; padding: 5px 6px; font-size: 8.5px; text-align: left; }
         td { border-bottom: 1px solid #ddd; padding: 5px 6px; vertical-align: top; }
         tr:nth-child(even) td { background: #f5f8f7; }
         .registro, .sucursal { color: #111827; }
-        .ubicacion { color: #135c46; }
+        .ubicacion { color: #1e5b4f; }
         .sub { color: #9CA3AF; font-size: 8px; }
         .guardia { color: #D97706; font-size: 8px; }
         .sin-encargado { color: #b91c1c; font-weight: bold; }

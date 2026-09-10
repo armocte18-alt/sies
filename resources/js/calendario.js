@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formEvento.reset();
         document.getElementById('evento-id').value = '';
         document.getElementById('evento-grupo-recurrencia').value = '';
-        document.getElementById('evento-color').value = '#135c46';
+        document.getElementById('evento-color').value = '#1e5b4f';
         document.getElementById('fila-horas').classList.remove('hidden');
         document.getElementById('btn-eliminar-evento').classList.add('hidden');
         document.getElementById('bloque-recurrencia').classList.add('hidden');
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('evento-fecha-fin').value = (props.fecha_fin_real && props.fecha_fin_real !== fechaInicio) ? props.fecha_fin_real : '';
         document.getElementById('evento-ubicacion').value = props.ubicacion || '';
         document.getElementById('evento-notas').value = props.notas || '';
-        document.getElementById('evento-color').value = props.color || event.backgroundColor || '#135c46';
+        document.getElementById('evento-color').value = props.color || event.backgroundColor || '#1e5b4f';
         document.getElementById('evento-tipo-asociado').value = props.asociado_tipo || '';
         document.getElementById('evento-invitados').value = (props.invitados || []).join(', ');
 
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btn-agregar-rapido').addEventListener('click', () => {
             formRapido.reset();
             document.getElementById('rapido-id').value = '';
-            document.getElementById('rapido-color').value = '#135c46';
+            document.getElementById('rapido-color').value = '#1e5b4f';
             document.getElementById('titulo-modal-rapido').textContent = 'Nuevo evento rápido';
             document.getElementById('btn-eliminar-rapido').classList.add('hidden');
             abrirModal('modal-evento-rapido');

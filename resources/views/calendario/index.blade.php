@@ -75,7 +75,7 @@
                     </div>
                     <div>
                         <x-input-label for="evento-color" value="Color" />
-                        <input id="evento-color" type="color" value="#135c46" class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm">
+                        <input id="evento-color" type="color" value="#1e5b4f" class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm">
                     </div>
                 </div>
 
@@ -183,7 +183,7 @@
                     </div>
                     <div>
                         <x-input-label for="rapido-color" value="Color" />
-                        <input id="rapido-color" type="color" value="#135c46" class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm">
+                        <input id="rapido-color" type="color" value="#1e5b4f" class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm">
                     </div>
                 </div>
 
