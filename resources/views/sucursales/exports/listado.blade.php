@@ -1,4 +1,9 @@
 <table>
+    {{-- Filas reservadas para el logotipo (WithDrawings lo ancla en A1); sin
+         texto para no encimarse con la imagen. --}}
+    <tr><td colspan="6">&nbsp;</td></tr>
+    <tr><td colspan="6">&nbsp;</td></tr>
+    <tr><td colspan="6">&nbsp;</td></tr>
     <tr><td colspan="6" style="text-align:right; font-weight:bold; font-size:8pt;">DIRECCIÓN DE SERVICIOS FINANCIEROS Y OPERACIÓN DE SUCURSALES</td></tr>
     <tr><td colspan="6" style="text-align:right; font-weight:bold; font-size:8pt;">SUBDIRECCIÓN DE PROCESOS Y SUPERVISIÓN</td></tr>
     <tr><td colspan="6" style="text-align:right; font-weight:bold; font-size:8pt;">GERENCIA ESTATAL CIUDAD DE MÉXICO</td></tr>

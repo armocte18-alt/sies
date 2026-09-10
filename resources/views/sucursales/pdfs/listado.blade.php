@@ -6,6 +6,8 @@
         @page { margin: 40px 30px 50px 30px; }
         body { font-family: 'Helvetica', sans-serif; font-size: 9px; color: #222; }
         .footer { position: fixed; bottom: -35px; left: 0; right: 0; height: 35px; text-align: center; font-size: 8px; color: #666; border-top: 1px solid #ccc; padding-top: 5px; }
+        .logotipo { text-align: center; margin-bottom: 6px; }
+        .logotipo img { height: 32px; }
         .letterhead { text-align: right; font-size: 8px; font-weight: bold; color: #111; line-height: 1.5; }
         .titulo { text-align: center; font-size: 15px; font-weight: bold; color: #135c46; margin: 14px 0 4px 0; text-transform: uppercase; }
         .filtros { text-align: center; font-size: 9px; font-style: italic; color: #4B5563; margin-bottom: 12px; }
@@ -24,6 +26,10 @@
 
     <div class="footer">
         Directorio de sucursales &mdash; {{ $sucursales->count() }} registro(s) &mdash; Generado por SIES el {{ now()->format('d/m/Y H:i') }}
+    </div>
+
+    <div class="logotipo">
+        <img src="{{ public_path('images/fondo_finabien.png') }}">
     </div>
 
     <div class="letterhead">
