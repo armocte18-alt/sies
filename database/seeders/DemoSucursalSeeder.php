@@ -72,14 +72,20 @@ class DemoSucursalSeeder extends Seeder
             'hora_inicio_labores_interno' => '08:00',
             'hora_fin_labores_interno' => '16:00',
             'tipo_poblacion' => 'urbana_alta_densidad',
-            'tipo_inmueble' => 'propio',
-            'comunicacion' => 'Red Local / Enlace Dedicado (TELMEX)',
             'telefono' => '55-1315-2018',
             'reparto_activo' => false,
             'enrutamiento' => 'MESIMJ',
             'dias_guardia' => 'Sábado',
             'apertura_guardia' => '09:00',
             'cierre_guardia' => '13:00',
+        ]);
+
+        $sucursal->inmueble()->updateOrCreate([], [
+            'tipo_inmueble' => 'propio',
+        ]);
+
+        $sucursal->equipamiento()->updateOrCreate([], [
+            'comunicacion' => 'Red Local / Enlace Dedicado (TELMEX)',
         ]);
 
         $sucursal->finanzas()->updateOrCreate([], [

@@ -60,6 +60,28 @@ class ActivoTiTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_tecnica_can_register_security_equipment_types(): void
+    {
+        $sucursal = Sucursal::factory()->create();
+        $tecnica = User::factory()->create();
+        $tecnica->assignRole('tecnica');
+
+        foreach (['camara', 'panel_alarma', 'sensor_movimiento'] as $tipo) {
+            $this->actingAs($tecnica)->post(route('sucursales.activos-ti.store', $sucursal), [
+                'tipo' => $tipo,
+                'marca' => 'Hikvision',
+                'modelo' => 'X-100',
+                'numero_serie' => 'SN-'.$tipo,
+                'etiqueta_inventario' => 'INV-'.$tipo,
+                'estado' => 'operativo',
+            ])->assertRedirect();
+        }
+
+        $this->assertSame(3, ActivoTi::where('sucursal_id', $sucursal->id)->count());
+        $this->assertDatabaseHas('activos_ti', ['sucursal_id' => $sucursal->id, 'tipo' => 'panel_alarma', 'numero_serie' => 'SN-panel_alarma']);
+        $this->assertDatabaseHas('activos_ti', ['sucursal_id' => $sucursal->id, 'tipo' => 'sensor_movimiento', 'numero_serie' => 'SN-sensor_movimiento']);
+    }
+
     public function test_cannot_delete_an_activo_belonging_to_another_sucursal(): void
     {
         $sucursalA = Sucursal::factory()->create();

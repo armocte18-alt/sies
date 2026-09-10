@@ -11,6 +11,14 @@
             @csrf
             @method('PATCH')
 
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div>
+                    <x-input-label for="comunicacion" value="Comunicación" />
+                    <x-text-input id="comunicacion" name="comunicacion" type="text" class="mt-1 block w-full"
+                        :value="old('comunicacion', $equipamiento?->comunicacion)" placeholder="Red local / enlace dedicado" />
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <div>
                     <x-input-label for="num_computadoras" value="Computadoras" />
@@ -137,7 +145,7 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach ($sucursal->activosTi as $activo)
                             <tr>
-                                <td class="px-3 py-2 capitalize text-gray-800">{{ $activo->tipo }}</td>
+                                <td class="px-3 py-2 text-gray-800">{{ App\Models\ActivoTi::TIPOS[$activo->tipo] ?? $activo->tipo }}</td>
                                 <td class="px-3 py-2 text-gray-600">{{ trim(($activo->marca ?? '').' '.($activo->modelo ?? '')) ?: '—' }}</td>
                                 <td class="px-3 py-2 text-gray-600">{{ $activo->numero_serie ?? '—' }}</td>
                                 <td class="px-3 py-2 text-gray-600">{{ $activo->etiqueta_inventario ?? '—' }}</td>
@@ -182,8 +190,8 @@
                         <x-input-label for="activo-tipo" value="Tipo" />
                         <select id="activo-tipo" name="tipo" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
-                            @foreach (['computadora', 'impresora', 'servidor', 'camara', 'switch', 'router', 'otro'] as $tipoOpcion)
-                                <option value="{{ $tipoOpcion }}">{{ ucfirst($tipoOpcion) }}</option>
+                            @foreach (App\Models\ActivoTi::TIPOS as $valor => $etiqueta)
+                                <option value="{{ $valor }}">{{ $etiqueta }}</option>
                             @endforeach
                         </select>
                     </div>

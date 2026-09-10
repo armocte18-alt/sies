@@ -17,6 +17,18 @@ class ActivoTi extends Model
 
     protected $table = 'activos_ti';
 
+    public const TIPOS = [
+        'computadora' => 'Computadora',
+        'impresora' => 'Impresora',
+        'servidor' => 'Servidor',
+        'camara' => 'Cámara',
+        'panel_alarma' => 'Panel de alarma',
+        'sensor_movimiento' => 'Sensor de movimiento',
+        'switch' => 'Switch',
+        'router' => 'Router',
+        'otro' => 'Otro',
+    ];
+
     protected function casts(): array
     {
         return [

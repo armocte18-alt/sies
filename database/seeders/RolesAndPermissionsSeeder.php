@@ -61,7 +61,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'empleados.ver', 'calendario.ver', 'calendario.gestionar',
         ],
         'administracion' => [
-            'sucursales.ver', 'sucursales.editar.inmueble', 'sucursales.editar.acervo',
+            'sucursales.ver', 'sucursales.editar.inmueble', 'sucursales.editar.acervo', 'sucursales.editar.reparto',
             'vehiculos.ver', 'vehiculos.gestionar', 'mantenimientos.ver', 'mantenimientos.gestionar',
         ],
         'tecnica' => ['sucursales.ver', 'sucursales.editar.equipamiento', 'mantenimientos.ver'],

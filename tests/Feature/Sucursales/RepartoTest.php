@@ -78,6 +78,24 @@ class RepartoTest extends TestCase
         $this->assertSame(5120, $moto->fresh()->kilometraje_actual);
     }
 
+    public function test_administracion_can_manage_reparto(): void
+    {
+        $sucursal = $this->sucursalConReparto();
+        $user = User::factory()->create();
+        $user->assignRole('administracion');
+
+        $this->actingAs($user)->post(route('sucursales.motocicletas.store', $sucursal), [
+            'placa' => 'XYZ-987',
+            'estado' => 'operativa',
+            'kilometraje_actual' => 1200,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('sucursal_motocicletas', [
+            'sucursal_id' => $sucursal->id,
+            'placa' => 'XYZ-987',
+        ]);
+    }
+
     public function test_finanzas_role_cannot_manage_reparto(): void
     {
         $sucursal = $this->sucursalConReparto();

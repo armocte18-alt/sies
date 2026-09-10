@@ -46,6 +46,7 @@ class SucursalPermissionsTest extends TestCase
 
         $this->actingAs($tecnica)
             ->patch(route('sucursales.equipamiento.update', $sucursal), [
+                'comunicacion' => 'Red Local / Enlace Dedicado (TELMEX)',
                 'num_computadoras' => 3,
                 'num_impresoras' => 1,
                 'num_servidores' => 0,
@@ -59,6 +60,7 @@ class SucursalPermissionsTest extends TestCase
 
         $this->assertDatabaseHas('sucursal_equipamientos', [
             'sucursal_id' => $sucursal->id,
+            'comunicacion' => 'Red Local / Enlace Dedicado (TELMEX)',
             'num_computadoras' => 3,
         ]);
 

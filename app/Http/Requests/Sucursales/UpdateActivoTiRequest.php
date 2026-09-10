@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Sucursales;
 
+use App\Models\ActivoTi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +16,7 @@ class UpdateActivoTiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tipo' => ['required', Rule::in(['computadora', 'impresora', 'servidor', 'camara', 'switch', 'router', 'otro'])],
+            'tipo' => ['required', Rule::in(array_keys(ActivoTi::TIPOS))],
             'etiqueta_inventario' => ['nullable', 'string', 'max:60'],
             'marca' => ['nullable', 'string', 'max:60'],
             'modelo' => ['nullable', 'string', 'max:60'],

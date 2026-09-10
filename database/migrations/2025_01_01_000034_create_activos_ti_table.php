@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sucursal_id')->constrained('sucursales')->cascadeOnDelete();
             $table->enum('tipo', [
-                'computadora', 'impresora', 'servidor', 'camara', 'switch', 'router', 'otro',
+                'computadora', 'impresora', 'servidor', 'camara', 'panel_alarma', 'sensor_movimiento', 'switch', 'router', 'otro',
             ]);
             $table->string('etiqueta_inventario', 60)->nullable();
             $table->string('marca', 60)->nullable();

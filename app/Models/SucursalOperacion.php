@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'sucursal_id', 'dias_laborables', 'hora_apertura_publico', 'hora_cierre_publico',
     'hora_inicio_labores_interno', 'hora_fin_labores_interno', 'tipo_poblacion',
-    'tipo_inmueble', 'comunicacion', 'telefono', 'reparto_activo', 'enrutamiento',
+    'telefono', 'reparto_activo', 'enrutamiento',
     'dias_guardia', 'apertura_guardia', 'cierre_guardia',
 ])]
 class SucursalOperacion extends Model

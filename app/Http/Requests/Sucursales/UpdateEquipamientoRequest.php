@@ -14,6 +14,7 @@ class UpdateEquipamientoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'comunicacion' => ['nullable', 'string', 'max:100'],
             'num_computadoras' => ['required', 'integer', 'min:0', 'max:9999'],
             'num_impresoras' => ['required', 'integer', 'min:0', 'max:9999'],
             'num_servidores' => ['required', 'integer', 'min:0', 'max:9999'],
@@ -32,6 +33,7 @@ class UpdateEquipamientoRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            'comunicacion' => 'comunicación',
             'num_computadoras' => 'número de computadoras',
             'num_impresoras' => 'número de impresoras',
             'num_servidores' => 'número de servidores',

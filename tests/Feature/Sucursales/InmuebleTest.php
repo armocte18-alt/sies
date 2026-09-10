@@ -53,4 +53,27 @@ class InmuebleTest extends TestCase
 
         $this->assertFalse($sucursal->inmueble()->firstOrFail()->cuenta_proteccion_civil);
     }
+
+    public function test_administracion_can_capture_tipo_inmueble_and_caja_fuerte(): void
+    {
+        $sucursal = Sucursal::factory()->create();
+        $admin = User::factory()->create();
+        $admin->assignRole('administracion');
+
+        $this->actingAs($admin)->patch(route('sucursales.inmueble.update', $sucursal), [
+            'tipo_inmueble' => 'arrendado',
+            'tipo_contrato_posesion' => 'arrendado',
+            'tipo_caja_fuerte' => 'disco',
+            'modelo_caja_fuerte' => 'Sentry Safe X055',
+            'numero_inventario_caja_fuerte' => 'CF-001',
+            'caja_fuerte_tiene_llave' => '1',
+        ])->assertRedirect();
+
+        $inmueble = $sucursal->inmueble()->firstOrFail();
+        $this->assertSame('arrendado', $inmueble->tipo_inmueble);
+        $this->assertSame('disco', $inmueble->tipo_caja_fuerte);
+        $this->assertSame('Sentry Safe X055', $inmueble->modelo_caja_fuerte);
+        $this->assertSame('CF-001', $inmueble->numero_inventario_caja_fuerte);
+        $this->assertTrue($inmueble->caja_fuerte_tiene_llave);
+    }
 }

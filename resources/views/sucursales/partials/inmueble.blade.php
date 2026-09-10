@@ -13,6 +13,16 @@
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div>
+                    <x-input-label for="tipo_inmueble" value="Tipo de inmueble" />
+                    <select id="tipo_inmueble" name="tipo_inmueble"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
+                        <option value="">Selecciona una opción</option>
+                        @foreach (['propio' => 'Inmueble propio', 'arrendado' => 'Arrendado', 'comodato' => 'Comodato', 'otro' => 'Otro'] as $value => $label)
+                            <option value="{{ $value }}" @selected(old('tipo_inmueble', $inmueble?->tipo_inmueble) === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
                     <x-input-label for="tipo_contrato_posesion" value="Tipo de contrato de posesión" />
                     <select id="tipo_contrato_posesion" name="tipo_contrato_posesion"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
@@ -89,6 +99,38 @@
                         <input type="date" id="vigencia_proteccion_civil" name="vigencia_proteccion_civil"
                             value="{{ old('vigencia_proteccion_civil', $inmueble?->vigencia_proteccion_civil?->format('Y-m-d')) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="rounded-md border border-gray-200 p-4">
+                <legend class="px-1 text-sm font-semibold text-gray-700">Caja fuerte</legend>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <div>
+                        <x-input-label for="tipo_caja_fuerte" value="Tipo" />
+                        <select id="tipo_caja_fuerte" name="tipo_caja_fuerte"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
+                            <option value="">Selecciona una opción</option>
+                            <option value="disco" @selected(old('tipo_caja_fuerte', $inmueble?->tipo_caja_fuerte) === 'disco')>Disco</option>
+                            <option value="llave" @selected(old('tipo_caja_fuerte', $inmueble?->tipo_caja_fuerte) === 'llave')>Llave</option>
+                        </select>
+                    </div>
+                    <div>
+                        <x-input-label for="modelo_caja_fuerte" value="Modelo" />
+                        <x-text-input id="modelo_caja_fuerte" name="modelo_caja_fuerte" type="text" class="mt-1 block w-full"
+                            :value="old('modelo_caja_fuerte', $inmueble?->modelo_caja_fuerte)" />
+                    </div>
+                    <div>
+                        <x-input-label for="numero_inventario_caja_fuerte" value="Número de inventario" />
+                        <x-text-input id="numero_inventario_caja_fuerte" name="numero_inventario_caja_fuerte" type="text" class="mt-1 block w-full"
+                            :value="old('numero_inventario_caja_fuerte', $inmueble?->numero_inventario_caja_fuerte)" />
+                    </div>
+                    <div class="flex items-center gap-2 sm:pt-6">
+                        <input type="hidden" name="caja_fuerte_tiene_llave" value="0">
+                        <input type="checkbox" id="caja_fuerte_tiene_llave" name="caja_fuerte_tiene_llave" value="1"
+                            @checked(old('caja_fuerte_tiene_llave', $inmueble?->caja_fuerte_tiene_llave))
+                            class="rounded border-gray-300 text-brand-green focus:ring-brand-green">
+                        <label for="caja_fuerte_tiene_llave" class="text-sm text-gray-700">Cuenta con llave</label>
                     </div>
                 </div>
             </fieldset>

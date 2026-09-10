@@ -65,21 +65,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
-                    <x-input-label for="tipo_inmueble" value="Tipo de inmueble" />
-                    <select id="tipo_inmueble" name="tipo_inmueble"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-green focus:ring-brand-green">
-                        <option value="">Selecciona una opción</option>
-                        @foreach (['propio' => 'Inmueble propio', 'arrendado' => 'Arrendado', 'comodato' => 'Comodato', 'otro' => 'Otro'] as $value => $label)
-                            <option value="{{ $value }}" @selected(old('tipo_inmueble', $operacion?->tipo_inmueble) === $value)>{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <x-input-label for="comunicacion" value="Comunicación" />
-                    <x-text-input id="comunicacion" name="comunicacion" type="text" class="mt-1 block w-full"
-                        :value="old('comunicacion', $operacion?->comunicacion)" placeholder="Red local / enlace dedicado" />
-                </div>
             </div>
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">

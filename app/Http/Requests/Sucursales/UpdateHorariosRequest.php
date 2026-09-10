@@ -23,8 +23,6 @@ class UpdateHorariosRequest extends FormRequest
             'tipo_poblacion' => ['nullable', Rule::in([
                 'urbana_alta_densidad', 'urbana_media_densidad', 'urbana_baja_densidad', 'rural',
             ])],
-            'tipo_inmueble' => ['nullable', Rule::in(['propio', 'arrendado', 'comodato', 'otro'])],
-            'comunicacion' => ['nullable', 'string', 'max:100'],
             'telefono' => ['nullable', 'string', 'max:20'],
             'reparto_activo' => ['required', 'boolean'],
             'enrutamiento' => ['nullable', 'string', 'max:60'],
@@ -43,7 +41,6 @@ class UpdateHorariosRequest extends FormRequest
             'hora_inicio_labores_interno' => 'hora inicio de labores (interno)',
             'hora_fin_labores_interno' => 'hora fin de labores (interno)',
             'tipo_poblacion' => 'tipo de población',
-            'tipo_inmueble' => 'tipo de inmueble',
             'reparto_activo' => 'reparto activo',
             'dias_guardia' => 'días de guardia',
             'apertura_guardia' => 'apertura de guardia',
